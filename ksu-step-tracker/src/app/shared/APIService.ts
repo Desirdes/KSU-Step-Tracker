@@ -12,7 +12,7 @@ export class APIService {
  // private rootURL = 'https://ksu-step-tracker-app.herokuapp.com';
 
   // Temporary localhost api url for testing
-  private rootURL = 'http://localhost:8080';
+  private rootURL = 'http://localhost:5000';
 
   // Generated after login with format: btoa(username + ":" + password)
   public userBasicAuth = '';
