@@ -1,0 +1,120 @@
+<div class="header">
+    <h1>Questionnaire Form</h1>
+    <p>This form is to record your general and medical information, and your fitness goal so that we can accurately calculate
+        your measurements and target data. You must be between the ages of 19 and 40 for this study.</p>
+</div>
+<div class="row justify-content-center my-5">
+<form class="col-lg-6" [formGroup]="questionnaireForm" (ngSubmit)="questionnaireForm.status !== 'INVALID' && onsubmit()">
+    <!--General Info Section-->
+    <h2 class="mb-3">General Info</h2>
+    <p>Please enter the following information below.</p>
+    <div class="form-row justify-content-center">
+        <div class="form-group col-sm-4">
+            <label for="age">Age</label>
+            <input type="number" id="age" formControlName="age" [ngClass]="{error : getControl('age')?.errors && getControl('age')?.touched}" name="age">
+            <div *ngIf="getControl('age')?.errors && getControl('age')?.touched">
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['required']">Age is required</small>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['max'] || getControl('age')?.errors?.['min']">Age must be between 19 and 40</small><br>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid age</small>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm">
+            <label for="sex">Sex</label>
+            <select class="custom-select" id="sex" formControlName="sex" [ngClass]="{error : getControl('sex')?.errors && getControl('sex')?.touched}">
+                <option selected>Choose...</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <div *ngIf="getControl('sex')?.errors && getControl('sex')?.touched">
+                <small class="text-danger" *ngIf="getControl('sex')?.errors?.['required']">Sex is required</small>
+            </div>
+        </div>
+        <div class="form-group col-sm">
+            <label for="race">Race</label>
+            <select class="custom-select" id="race" formControlName="race" [ngClass]="{error : getControl('race')?.errors && getControl('race')?.touched}">
+                <option selected>Choose...</option>
+                <option value="Black">Black or African American</option>
+                <option value="White">White</option>
+                <option value="Native">American Indian or Alaskan Native</option>
+                <option value="Asian">Asian</option>
+                <option value="nativeHawaiian">Native Hawaiian or Other Pacific Islander</option>
+            </select>
+            <div *ngIf="getControl('Race')?.errors && getControl('Race')?.touched">
+                <small class="text-danger" *ngIf="getControl('Race')?.errors?.['required']">Race is required</small>
+            </div>
+        </div>
+    </div>
+    <!--Medical Info Section-->
+    <h2>Medical Info</h2>
+    <p>Please asnwer the following with the correct measurements for accurate results.</p>
+    <div class="form-row">
+        <div class="form-group col-md">
+            <label for="height">Height (inches)</label>
+            <input type="number" class="form-control" formControlName="height" id= "height" placeholder="e.g. 62" [ngClass]="{error : getControl('height')?.errors && getControl('height')?.touched}">
+            <div *ngIf="getControl('height')?.errors && getControl('height')?.touched">
+                <small class="text-danger" *ngIf="getControl('height')?.errors?.['required']">Height is required</small>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid height</small>
+            </div>
+        </div>
+        <div class="form-group col-md">
+            <label for="weight">Weight (lb)</label>
+            <input type="number" class="form-control" formControlName="weight" id= "weight" placeholder="e.g. 152" [ngClass]="{error : getControl('weight')?.errors && getControl('weight')?.touched}">
+            <div *ngIf="getControl('weight')?.errors && getControl('weight')?.touched">
+                <small class="text-danger" *ngIf="getControl('weight')?.errors?.['required']">Weight is required</small>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid weight</small>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm">
+            <label for="waistCircumference">Waist Circumference (inches)</label>
+            <input type="number" class="form-control" formControlName="waistCircumference"  id= "waistCircumference" placeholder="e.g. 29" [ngClass]="{error : getControl('waistCircumference')?.errors && getControl('waistCircumference')?.touched}">
+            <div *ngIf="getControl('waistCircumference')?.errors && getControl('waistCircumference')?.touched">
+                <small class="text-danger" *ngIf="getControl('waistCircumference')?.errors?.['required']">Waist Circumference is required</small>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid waist circumference</small>
+            </div>
+        </div>
+        <div class="form-group col-sm">
+            <label for="neckCircumference">Neck Circumference (inches)</label>
+            <input type="number" class="form-control" formControlName="neckCircumference" id= "neckCircumference" placeholder="e.g. 22.44" [ngClass]="{error : getControl('neckCircumference')?.errors && getControl('neckCircumference')?.touched}">
+            <div *ngIf="getControl('neckCircumference')?.errors && getControl('neckCircumference')?.touched">
+                <small class="text-danger" *ngIf="getControl('neckCircumference')?.errors?.['required']">Neck Circumference is required</small>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid neck circumference</small>
+            </div>
+        </div>
+    </div>
+    <div class="form-row justify-content-center">
+        <div class="form-group col-sm-4">
+            <label for="bodyFatPercentage">Body Fat Percentage (%)</label>
+            <input type="number" id="bodyFatPercentage" formControlName="bodyFatPercentage" placeholder="34" [ngClass]="{error : getControl('bodyFatPercentage')?.errors && getControl('bodyFatPercentage')?.touched}">
+            <div *ngIf="getControl('bodyFatPercentage')?.errors && getControl('bodyFatPercentage')?.touched">
+                <small class="text-danger" *ngIf="getControl('bodyFatPercentage')?.errors?.['required']">Body Fat Percentage is required</small>
+                <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid body fat percentage</small>
+            </div>
+        </div>
+    </div>
+    <!--Fitness Goal Section-->
+    <h2>Fitness Goal</h2>
+    <p>What is your fitness goal?</p>
+    <div class="form-row">
+        <div class="form-group col-sm">
+            <label for="targetWeightLossPercentage">Target Weight Loss (%)</label>
+            <select class="custom-select" id="targetWeightLossPercentage" formControlName="targetWeightLossPercentage" [ngClass]="{error : getControl('targetWeightLossPercentage')?.errors && getControl('targetWeightLossPercentage')?.touched}">
+                <option selected>Choose...</option>
+                <option value="5">5%</option>
+                <option value="6">6%</option>
+                <option value="7">7%</option>
+                <option value="8">8%</option>
+                <option value="9">9%</option>
+                <option value="10">10%</option>
+            </select>
+            <div *ngIf="getControl('targetWeightLossPercentage')?.errors && getControl('targetWeightLossPercentage')?.touched">
+                <small class="text-danger" *ngIf="getControl('targetWeightLossPercentage')?.errors?.['required']">Target Weight Percentage is required</small>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-dark" type="submit"  [disabled]="questionnaireForm.status === 'INVALID'">Submit</button>
+</form>
+</div>

@@ -1,0 +1,90 @@
+<!--<ejs-sidebar id="default-sidebar" >
+    <div class="title"> Sidebar content</div>
+    </ejs-sidebar>-->
+<!---
+<div class="calcs">
+    <p id= "targetWeight">Target Body Weight: {{this.targetWeight}}</p>
+    <p id= "targetBodyFatPercentage">Target Body Fat Percentage: {{this.targetBodyFatPercentage}}</p>
+    <p id= "stepsPerDay">Steps Per Day: {{this.stepsPerDay}}</p>
+</div>-->
+
+<!--Sidebar Menu-->
+<app-sidenav></app-sidenav>
+<!--Main Content-->
+<section style="background-color: #eee;">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.full_name}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Sex</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.gender}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Current Weight (lbs)</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].weight}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Target Weight (lbs)</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].weight - this.currentPerson.targets[0].weightLoss}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Height (inches)</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].height}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Latest Recorded Step Count</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.activity.length? this.currentPerson.activity[0].steps + ' on ' + this.latestActivityDate : 'No recorded activity.'}}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Target Step Count Per Day</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{this.currentPerson.targets[0].dailySteps}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row2">
+        <app-chart></app-chart>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,13 @@
+.row {
+    display: flex;
+    justify-content: center;
+    margin-left: 7rem;
+}
+
+.row2 {
+    margin-left: 7rem;
+}
+
+section {
+    margin-left: 10rem;
+}
