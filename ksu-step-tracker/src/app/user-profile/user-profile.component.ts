@@ -9,6 +9,7 @@ import { Chart } from 'node_modules/chart.js';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent{
+  @Input() sideNavStatus: boolean = false;
   isDisabled:boolean = true;
   // @ViewChild('f') editForm: NgForm
   // onSubmit(form: NgForm){

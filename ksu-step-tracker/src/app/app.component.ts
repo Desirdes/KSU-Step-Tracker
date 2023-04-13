@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { APIService } from './shared/APIService';
 import { Person } from './shared/models/UserData.model';
+import { NavbarComponent } from './shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,8 @@ import { Person } from './shared/models/UserData.model';
 export class AppComponent implements OnInit{
   title = 'ksu-wlt-app';
   selectedFile = null;
+
+  sideNavStatus: boolean = false;
 
   constructor(
     private http: HttpClient,

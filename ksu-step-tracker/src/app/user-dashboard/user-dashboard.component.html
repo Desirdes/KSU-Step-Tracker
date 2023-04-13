@@ -7,84 +7,117 @@
     <p id= "targetBodyFatPercentage">Target Body Fat Percentage: {{this.targetBodyFatPercentage}}</p>
     <p id= "stepsPerDay">Steps Per Day: {{this.stepsPerDay}}</p>
 </div>-->
-
 <!--Sidebar Menu-->
-<app-sidenav></app-sidenav>
-<!--Main Content-->
+<app-sidenav [sideNavStatus]="sideNavStatus"></app-sidenav>
+<!--Main User Content-->
 <section style="background-color: #eee;">
-    <div class="container py-5">
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Full Name</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.full_name}}</p>
-                </div>
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Sex</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.gender}}</p>
-                </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.full_name}}</p>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Current Weight (lbs)</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].weight}}</p>
-                </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Sex</p>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Target Weight (lbs)</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].weight - this.currentPerson.targets[0].weightLoss}}</p>
-                </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.gender}}</p>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Height (inches)</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].height}}</p>
-                </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Current Weight (lbs)</p>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Latest Recorded Step Count</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.activity.length? this.currentPerson.activity[0].steps + ' on ' + this.latestActivityDate : 'No recorded activity.'}}</p>
-                </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].weight}}</p>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Target Step Count Per Day</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{this.currentPerson.targets[0].dailySteps}}</p>
-                </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Target Weight (lbs)</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].weight - this.currentPerson.targets[0].weightLoss}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Height (inches)</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.biometrics[0].height}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Latest Recorded Step Count</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.activity.length? this.currentPerson.activity[0].steps + ' on ' + this.latestActivityDate : 'No recorded activity.'}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Target Step Count Per Day</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.targets[0].dailySteps}}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row2">
-        <app-chart></app-chart>
-      </div>
     </div>
-  </section>
+    <div class="row2">
+      <app-chart></app-chart>
+    </div>
+  </div>
+</section>
+
+<!--Admin Dashboard-->
+<section>
+  <table mat-table class="mat-elevation-z8 demo-table">
+    <!-- Position Column -->
+    <ng-container matColumnDef="demo-position">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="demo-name">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="demo-weight">
+      <th mat-header-cell *matHeaderCellDef> Weight </th>
+      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="demo-symbol">
+      <th mat-header-cell *matHeaderCellDef> Symbol </th>
+      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+</section>
