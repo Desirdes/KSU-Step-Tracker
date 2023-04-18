@@ -14,6 +14,8 @@
   align-items: center;
   font-size: 1.5rem;
   cursor: pointer;
+  text-decoration: none;
+  color: #fff;
 }
 
   .side-nav-button:hover {
@@ -68,3 +70,79 @@
     text-decoration: none;
     color: #fff;
   }
+
+  /*New Edition
+  header {
+    width: 100%;
+    height: auto;
+    background-color: #febc11;
+    overflow-x: hidden;
+  }
+
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+
+  a:hover {
+    color: #fff;
+  }
+  
+  header .container-fluid {
+      width: 100%;
+      padding: 0px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+  header .side-nav-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  header .side-nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 30%;
+  }
+
+  header .navbar-logo .navbar-brand{
+    font-size: large;
+    color: #333;
+    font-weight: bold;
+    width: 140px;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    /*margin-right: 30rem;
+  }
+
+  header .nav-items {
+    display: flex;
+    align-items: center;
+    letter-spacing: 3px;
+  }
+
+  header .item {
+    text-align: center;
+    color: #fff;
+    padding: 5px 10px;
+    transition: all .1s ease;
+  }
+
+  header .item:hover {
+    border-bottom: 3px solid #333;
+    transition: all .1s ease-out;
+  }
+
+  header .item-button a {
+    width: 100px;
+    margin-left: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }*/

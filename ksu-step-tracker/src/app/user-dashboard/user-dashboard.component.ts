@@ -9,13 +9,18 @@ import { APIService } from '../shared/APIService';
   styleUrls: ['./user-dashboard.component.css']
 })
 export class UserDashboardComponent implements OnInit{
+  //Sidebar Menu
+  subMenuState:boolean = false;
+  burgerClicked(evnt){
+    this.subMenuState = evnt;
+    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
+  }
+
   constructor(
     private route: ActivatedRoute,
     private appComponent: AppComponent,
     private apiService: APIService
   ) { }
-
-  @Input() sideNavStatus: boolean = false;
 
   public currentPerson = this.appComponent.currentPerson;
   public latestActivityDate = new Date().toDateString();

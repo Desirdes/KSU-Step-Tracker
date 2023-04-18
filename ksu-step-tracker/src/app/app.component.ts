@@ -3,7 +3,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { APIService } from './shared/APIService';
 import { Person } from './shared/models/UserData.model';
-import { NavbarComponent } from './shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,12 @@ export class AppComponent implements OnInit{
   title = 'ksu-wlt-app';
   selectedFile = null;
 
-  sideNavStatus: boolean = false;
+  subMenuState:boolean = false;
+  burgerClicked(evnt){
+    this.subMenuState = evnt;
+    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
+  }
+
 
   constructor(
     private http: HttpClient,

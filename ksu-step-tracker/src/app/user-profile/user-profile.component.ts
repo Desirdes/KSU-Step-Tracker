@@ -8,8 +8,16 @@ import { Chart } from 'node_modules/chart.js';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent{
-  @Input() sideNavStatus: boolean = false;
+export class UserProfileComponent implements OnInit{
+  
+  //Sidebar Menu
+  subMenuState:boolean = false;
+  burgerClicked(evnt){
+    this.subMenuState = evnt;
+    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
+  }
+
+  ngOnInit(): void {}
   isDisabled:boolean = true;
   // @ViewChild('f') editForm: NgForm
   // onSubmit(form: NgForm){

@@ -1,4 +1,4 @@
-<app-navbar (sideNavToggle)="sideNavStatus = $event;"></app-navbar>
+<app-navbar (menuState)='burgerClicked($event)'></app-navbar>
 <router-outlet></router-outlet>
 <!-- <h1>User Profile Page</h1>
 <input type="file" (change)="onFileSelected($event)">

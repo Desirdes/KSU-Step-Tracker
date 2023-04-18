@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Chart, ChartDataset, ChartOptions } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts/public_api';
 import { from } from 'rxjs';
@@ -10,6 +10,13 @@ import { from } from 'rxjs';
 })
 
 export class ProgressComponent implements OnInit{
+//Sidebar Menu
+  subMenuState:boolean = false;
+  burgerClicked(evnt){
+    this.subMenuState = evnt;
+    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
+  }
+  
   ngOnInit(): void {
     this.updateProgressBar();
     this.createBarChart();

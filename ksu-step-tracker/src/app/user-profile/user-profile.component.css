@@ -1,12 +1,11 @@
 section {
   position: relative;
-  margin-left: 10rem;
 }
 
 .row {
   display: flex;
   justify-content: center;
-  margin-left: 7rem;
+  /*margin-left: 7rem;*/
 }
 
 .card {
