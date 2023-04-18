@@ -55,7 +55,7 @@ export class AddStepsComponent {
     await this.apiService.addActivity(this.appComponent.currentPerson.id, this.addStepsForm.get('steps').value, this.addStepsForm.get('date').value).then(async addActivityResponse => {
       await this.apiService.getAllActivity(this.appComponent.currentPerson.id).then(async activityResponse => {
         // Sort by order of date steps were done, latest to oldest
-        this.appComponent.currentPerson.activity = activityResponse.sort((a, b) => {
+        this.appComponent.currentPerson.activities = activityResponse.sort((a, b) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
       }, error => {

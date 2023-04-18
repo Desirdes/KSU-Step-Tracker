@@ -98,7 +98,7 @@ export class QuestionnaireComponent {
             // Update local variables for person data of user
             this.appComponent.currentPerson = getPersonResponse;
             if(getPersonResponse.activities == null){
-              this.appComponent.currentPerson.activity = [];
+              this.appComponent.currentPerson.activities = [];
             }
 
             // Route to dashboard

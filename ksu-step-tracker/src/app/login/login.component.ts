@@ -48,18 +48,13 @@ export class LoginComponent{
           // Update local variables for person data of user
           this.appComponent.currentPerson = getPersonResponse;
 
-          await this.apiService.getAllActivity(this.appComponent.currentPerson.id).then(async activityResponse => {
-            // Sort by order of date steps were done, latest to oldest
-            this.appComponent.currentPerson.activity = activityResponse.sort((a, b) => {
-              return new Date(b.date).getTime() - new Date(a.date).getTime();
-            });
-
-            // Route to dashboard
-            this.router.navigate(['/user-dashboard']);
-          }, error => {
-            console.log("error: " + error);
-                // handle error here
+          // Sort by order of date steps were done, latest to oldest
+          this.appComponent.currentPerson.activities.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
           });
+
+          // Route to dashboard
+          this.router.navigate(['/user-dashboard']);
         }, error => {
           console.log("error: " + error);
           // handle error here

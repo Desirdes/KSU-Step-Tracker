@@ -24,9 +24,9 @@ export class ChartComponent implements OnInit{
  //Line Chart
  createLineChart(){
   // Check is user has any activity to chart
-  if(this.currentPerson.activity.length){
+   if (this.currentPerson.activities.length){
     var targetSteps = this.currentPerson.targets[0].dailySteps;
-    var activityArray = this.currentPerson.activity;
+     var activityArray = this.currentPerson.activities;
     var dateArray = [];
     var stepsArray = [];
     // Used to make a line for chart

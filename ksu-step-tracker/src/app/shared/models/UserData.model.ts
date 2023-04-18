@@ -6,9 +6,10 @@ export class Person {
   public demographic: string;
   public age: number;
   public username: string;
+  public signupDate: Date;
   public targets: TargetData[];
   public biometrics: BiometricData[];
-  public activity: ActivityData[];
+  public activities: ActivityData[];
 }
 
 export class TargetData {
@@ -17,6 +18,7 @@ export class TargetData {
   public personID: number;
   public weightLoss: number;
   public weightLossPercentage: number;
+  public dateUpdated: Date;
 }
 
 export class BiometricData {
@@ -27,6 +29,7 @@ export class BiometricData {
   public waistCircumference: number;
   public weight: number;
   public personID: number;
+  public dateUpdated: Date;
 }
 
 export class ActivityData {
