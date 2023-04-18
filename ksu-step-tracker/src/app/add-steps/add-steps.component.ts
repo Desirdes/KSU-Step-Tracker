@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { APIService } from '../shared/APIService';
@@ -10,6 +10,12 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./add-steps.component.css']
 })
 export class AddStepsComponent {
+//Sidebar Menu
+  subMenuState:boolean = false;
+  burgerClicked(evnt){
+    this.subMenuState = evnt;
+    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
+  }
 
   //Success Message
   alert:boolean = false

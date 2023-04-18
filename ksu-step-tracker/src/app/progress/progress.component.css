@@ -1,3 +1,14 @@
+app-sidenav {
+  position: absolute;
+  left: 0rem;
+  width: 60px;
+  height: calc(100vh - 4rem);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  background-color: #1b1b1b;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
 .container {
   display: flex;
   align-items: center;

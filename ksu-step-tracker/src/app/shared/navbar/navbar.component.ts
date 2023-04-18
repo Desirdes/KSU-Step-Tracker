@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Event, NavigationEnd, NavigationStart, Route, Router } from '@angular/router';
 import { filter, pairwise } from 'rxjs/operators'
+import { AppComponent } from 'src/app/app.component';
+import { APIService } from '../APIService';
 
 @Component({
   selector: 'app-navbar',
@@ -8,17 +10,35 @@ import { filter, pairwise } from 'rxjs/operators'
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  @Output() sideNavToggle = new EventEmitter<boolean>();
-  menuStatus: boolean = false;
+  @Output() menuState = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private appComponent: AppComponent,
+    private apiService: APIService) { }
 
-  ngOnInit(): void { }
+  //API
+  public currentPerson = this.appComponent.currentPerson;
 
-  sideNavClick() {
-    this.menuStatus = !this.menuStatus;
-    this.sideNavToggle.emit(this.menuStatus);
+  opened: boolean;
+  showMenu = false; /* false by default, since hidden */
+  toggleMenu() {
+      console.log("inside toggleMenu");
+      this.showMenu = !this.showMenu;
+      this.menuState.emit(this.showMenu);
+   }
+  ngOnInit() {
+    this.openModal;
+    this.onCloseHandled;
+    this.toggleMenu;
+  }
 
+  //Modal
+  display = "";
+  openModal() {
+    this.display = "block";
+  }
+  onCloseHandled() {
+    this.display = "none";
   }
 
 }
