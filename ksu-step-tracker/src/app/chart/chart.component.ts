@@ -24,19 +24,38 @@ export class ChartComponent implements OnInit{
  //Line Chart
  createLineChart(){
   // Check is user has any activity to chart
-   if (this.currentPerson.activities.length){
-    var targetSteps = this.currentPerson.targets[0].dailySteps;
-     var activityArray = this.currentPerson.activities;
-    var dateArray = [];
-    var stepsArray = [];
-    // Used to make a line for chart
-    var targetStepsArray = [];
-    activityArray.forEach(activity => {
-      dateArray.unshift(new Date(activity.date).toDateString());
-      stepsArray.unshift(activity.steps);
-      targetStepsArray.unshift(targetSteps);
-    });
-    this.lineChart = new Chart("MyChart", {
+   if (this.currentPerson.activities && this.currentPerson.activities.length){
+      var targetStepsArray = [];
+      var activityArray = this.currentPerson.activities;
+      var dateArray = [];
+      var stepsArray = [];
+      // Used to make a comparison line for chart
+     var targetStepsArray = [];
+
+     activityArray.forEach(activity => {
+       var currentTargetSteps = 0
+       var entryDate = new Date(activity.date).setHours(0, 0, 0, 0);
+       this.currentPerson.targets.forEach((targetData, index) => {
+         var updateDate = new Date(targetData.dateUpdated).setHours(0, 0, 0, 0);
+          //Check if this is the latest entry
+          if (index == this.currentPerson.targets.length - 1) {
+              if (entryDate >= updateDate) {
+                currentTargetSteps = targetData.dailySteps;
+              }
+          } else {
+            var nextEntryUpdateDate = new Date(this.currentPerson.targets[index + 1].dateUpdated).setHours(0, 0, 0, 0);
+              if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
+                currentTargetSteps = targetData.dailySteps;
+              }
+          }
+       });
+
+        dateArray.unshift(new Date(activity.date).toDateString());
+        stepsArray.unshift(activity.steps);
+        targetStepsArray.unshift(currentTargetSteps);
+     });
+
+      this.lineChart = new Chart("MyChart", {
         type: 'line', //this denotes tha type of chart
 
         data: {// values on X-Axis

@@ -27,7 +27,7 @@ export class AppComponent implements OnInit{
 
   }
 
-  currentPerson = new Person();
+  currentPerson = null;
 
   userRoles = "";
 

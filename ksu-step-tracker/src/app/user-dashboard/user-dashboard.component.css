@@ -2,13 +2,73 @@
     display: flex;
     justify-content: center;
     /*margin-left: 10rem;*/
-    position: relative;
+
 }
 
-.row2 {
-    /*margin-left: 10rem;*/
+
+.error {
+  border: 1px solid red;
 }
 
-section {
-    /*margin-left: 10rem;*/
+small {
+  font-size: 15px;
+}
+
+.alert {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*margin-left: 35rem;*/
+}
+
+.add-steps-component {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+form {
+  height: 100%;
+  width: 600px;
+  background-color: #ffc629;
+  position: relative;
+  /*box-shadow: 30px 30px 30px 30px rgba(0, 0, 0, 0.1);*/
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+}
+
+  form h2 {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 30px;
+  }
+
+.material-symbols-outlined {
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+form .form-group {
+  margin: 20px;
+  text-align: center;
+  font-size: 15px;
+}
+
+form input {
+  border-radius: 20px;
+  margin-bottom: 15px;
+  padding: 10px 20px;
+  height: 40px;
+}
+
+form button {
+  width: 100%;
+  border-radius: 1rem;
+  padding: 1.5%;
 }

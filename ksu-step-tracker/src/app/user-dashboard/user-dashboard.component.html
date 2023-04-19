@@ -4,8 +4,8 @@
 <section style="background-color: #eee;">
   <div class="container py-5">
     <div class="row">
-      <div class="col-lg-8">
-        <div class="card mb-4">
+      <div class="column" style="width: 50%;">
+        <div class="card mb-4" style="height: 100%;">
           <div class="card-body">
             <div class="row">
               <div class="col-sm-3">
@@ -69,11 +69,52 @@
                 <p class="text-muted mb-0">{{this.currentPerson.targets[this.currentPerson.targets.length - 1].dailySteps}}</p>
               </div>
             </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-12">
+                <button mat-raised-button color="primary" (click)="this.onUpdateBiometricsButtonClick()">
+                  Update Biometrics
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="column" style="width: 50%;">
+        <div class="add-steps-component">
+          <form [formGroup]="addStepsForm" (ngSubmit)="addStepsForm.status !== 'INVALID' && onSubmitStepsClick()">
+            <i class="material-symbols-outlined">directions_run</i>
+            <h2 class="mb-3">+ Add Steps</h2>
+            <div class="form-row justify-content-center">
+              <div class="form-group col-sm-4">
+                <label for="steps">Steps</label>
+                <input type="number" id="steps" formControlName="steps" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" name="steps">
+                <div *ngIf="getControl('steps')?.errors && getControl('steps')?.touched">
+                  <small class="text-danger" *ngIf="getControl('steps')?.errors?.['required']">Steps is required</small>
+                </div>
+              </div>
+            </div> <div class="form-row justify-content-center">
+              <div class="form-group col-lg-5">
+                <label for="date">Date</label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Choose a date</mat-label>
+                  <input id="date" matInput [min]="minDate" [max]="maxDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <div *ngIf="getControl('date')?.errors && getControl('date')?.touched">
+                  <small class="text-danger" *ngIf="getControl('date')?.errors?.['required']">Date is required</small>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-dark" id="submit" type="submit" [disabled]="addStepsForm.status === 'INVALID'">Save</button>
+            <!--<button class="btn btn-light" id="goBack" type="submit" >Go Back</button>-->
+          </form>
+        </div>
+      </div>
     </div>
-    <div class="row2">
+    <div class="row" *ngIf="this.showCharts">
       <app-chart></app-chart>
     </div>
   </div>

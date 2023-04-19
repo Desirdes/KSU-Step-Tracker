@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+
 * {
   padding: 0;
   margin: 0;
@@ -6,8 +7,7 @@
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  /*padding-top: 42px;
-  overflow-x: hidden;*/
+  padding-top: 42px;
 }
 
 html, body {

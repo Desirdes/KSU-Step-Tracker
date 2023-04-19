@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Event, NavigationEnd, NavigationStart, Route, Router } from '@angular/router';
+import { Event, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { filter, pairwise } from 'rxjs/operators'
 import { AppComponent } from 'src/app/app.component';
 import { APIService } from '../APIService';
@@ -13,11 +13,10 @@ export class NavbarComponent implements OnInit {
   @Output() menuState = new EventEmitter();
 
   constructor(
-    private appComponent: AppComponent,
-    private apiService: APIService) { }
-
-  //API
-  public currentPerson = this.appComponent.currentPerson;
+    public appComponent: AppComponent,
+    private apiService: APIService,
+    private router: Router
+  ) { }
 
   opened: boolean;
   showMenu = false; /* false by default, since hidden */
@@ -41,4 +40,10 @@ export class NavbarComponent implements OnInit {
     this.display = "none";
   }
 
+  // Later might add a confirm dialog to ensure user wants to logout
+  public onLogoutClick() {
+    this.appComponent.currentPerson = null;
+    this.appComponent.userRoles = "";
+    this.router.navigate(["/login"]);
+  }
 }

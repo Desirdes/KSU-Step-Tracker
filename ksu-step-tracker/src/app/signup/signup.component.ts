@@ -3,6 +3,7 @@ import { AbstractControl, FormGroup, FormControl, FormBuilder, Validators } from
 import { Router } from '@angular/router';
 import { APIService } from '../shared/APIService';
 import { AppComponent } from '../app.component';
+import { Person } from '../shared/models/UserData.model';
 
 @Component({
   selector: 'app-signup',
@@ -71,6 +72,8 @@ export class SignupComponent {
         await this.apiService.loginUser(this.signupForm.get('username').value, this.signupForm.get('password').value).then(loginResponse => {
             // On successful login set the user basic auth
             this.apiService.userBasicAuth = btoa(this.signupForm.get('username').value + ":" + this.signupForm.get('password').value);
+
+            this.appComponent.currentPerson = new Person();
 
             // Set the personID and username for logged in user
             this.appComponent.currentPerson.id = loginResponse.personID;

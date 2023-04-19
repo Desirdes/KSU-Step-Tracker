@@ -52,7 +52,7 @@
     <div class="form-row">
         <div class="form-group col-md">
             <label for="height">Height (inches)</label>
-            <input type="number" class="form-control" formControlName="height" id= "height" placeholder="e.g. 62" [ngClass]="{error : getControl('height')?.errors && getControl('height')?.touched}">
+            <input type="number" class="form-control" formControlName="height" id= "height" placeholder="e.g. 68" [ngClass]="{error : getControl('height')?.errors && getControl('height')?.touched}">
             <div *ngIf="getControl('height')?.errors && getControl('height')?.touched">
                 <small class="text-danger" *ngIf="getControl('height')?.errors?.['required']">Height is required</small>
                 <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid height</small>
@@ -60,7 +60,7 @@
         </div>
         <div class="form-group col-md">
             <label for="weight">Weight (lb)</label>
-            <input type="number" class="form-control" formControlName="weight" id= "weight" placeholder="e.g. 152" [ngClass]="{error : getControl('weight')?.errors && getControl('weight')?.touched}">
+            <input type="number" class="form-control" formControlName="weight" id= "weight" placeholder="e.g. 197" [ngClass]="{error : getControl('weight')?.errors && getControl('weight')?.touched}">
             <div *ngIf="getControl('weight')?.errors && getControl('weight')?.touched">
                 <small class="text-danger" *ngIf="getControl('weight')?.errors?.['required']">Weight is required</small>
                 <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid weight</small>
@@ -70,7 +70,7 @@
     <div class="form-row">
         <div class="form-group col-sm">
             <label for="waistCircumference">Waist Circumference (inches)</label>
-            <input type="number" class="form-control" formControlName="waistCircumference"  id= "waistCircumference" placeholder="e.g. 29" [ngClass]="{error : getControl('waistCircumference')?.errors && getControl('waistCircumference')?.touched}">
+            <input type="number" class="form-control" formControlName="waistCircumference"  id= "waistCircumference" placeholder="e.g. 40" [ngClass]="{error : getControl('waistCircumference')?.errors && getControl('waistCircumference')?.touched}">
             <div *ngIf="getControl('waistCircumference')?.errors && getControl('waistCircumference')?.touched">
                 <small class="text-danger" *ngIf="getControl('waistCircumference')?.errors?.['required']">Waist Circumference is required</small>
                 <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid waist circumference</small>
@@ -78,7 +78,7 @@
         </div>
         <div class="form-group col-sm">
             <label for="neckCircumference">Neck Circumference (inches)</label>
-            <input type="number" class="form-control" formControlName="neckCircumference" id= "neckCircumference" placeholder="e.g. 22.44" [ngClass]="{error : getControl('neckCircumference')?.errors && getControl('neckCircumference')?.touched}">
+            <input type="number" class="form-control" formControlName="neckCircumference" id= "neckCircumference" placeholder="e.g. 15" [ngClass]="{error : getControl('neckCircumference')?.errors && getControl('neckCircumference')?.touched}">
             <div *ngIf="getControl('neckCircumference')?.errors && getControl('neckCircumference')?.touched">
                 <small class="text-danger" *ngIf="getControl('neckCircumference')?.errors?.['required']">Neck Circumference is required</small>
                 <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid neck circumference</small>
@@ -88,7 +88,7 @@
     <div class="form-row justify-content-center">
         <div class="form-group col-sm-4">
             <label for="bodyFatPercentage">Body Fat Percentage (%)</label>
-            <input type="number" id="bodyFatPercentage" formControlName="bodyFatPercentage" placeholder="34" [ngClass]="{error : getControl('bodyFatPercentage')?.errors && getControl('bodyFatPercentage')?.touched}">
+            <input type="number" id="bodyFatPercentage" formControlName="bodyFatPercentage" placeholder="20" [ngClass]="{error : getControl('bodyFatPercentage')?.errors && getControl('bodyFatPercentage')?.touched}">
             <div *ngIf="getControl('bodyFatPercentage')?.errors && getControl('bodyFatPercentage')?.touched">
                 <small class="text-danger" *ngIf="getControl('bodyFatPercentage')?.errors?.['required']">Body Fat Percentage is required</small>
                 <small class="text-danger" *ngIf="getControl('age')?.errors?.['pattern']">Please enter a valid body fat percentage</small>

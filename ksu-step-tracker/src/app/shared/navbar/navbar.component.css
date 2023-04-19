@@ -18,10 +18,18 @@
   color: #fff;
 }
 
-  .side-nav-button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 30%;
-  }
+.nav-user-name-display{
+    height: 37.6px;
+    display: table-cell;
+    vertical-align: middle;
+    padding-right: 20px;
+    font-size: 1.5rem;
+}
+
+.side-nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 30%;
+}
 
   .navbar-brand
   {
