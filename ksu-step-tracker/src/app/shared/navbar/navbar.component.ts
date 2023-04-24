@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Event, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { filter, pairwise } from 'rxjs/operators'
 import { AppComponent } from 'src/app/app.component';
 import { APIService } from '../APIService';
+import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,9 @@ import { APIService } from '../APIService';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  @Output() menuState = new EventEmitter();
+  //public sidenav;
+  @Output() public sideNavToggle = new EventEmitter();
+  //@ViewChild('sidenav', {static:false}) sidenav: MatSidenav;
 
   constructor(
     public appComponent: AppComponent,
@@ -18,27 +21,24 @@ export class NavbarComponent implements OnInit {
     private router: Router
   ) { }
 
-  opened: boolean;
-  showMenu = false; /* false by default, since hidden */
-  toggleMenu() {
-      console.log("inside toggleMenu");
-      this.showMenu = !this.showMenu;
-      this.menuState.emit(this.showMenu);
-   }
-  ngOnInit() {
-    this.openModal;
-    this.onCloseHandled;
-    this.toggleMenu;
-  }
+  //Open main nav menu
+  collapsed = false; /* false by default, since hidden */
 
-  //Modal
-  display = "";
-  openModal() {
-    this.display = "block";
-  }
-  onCloseHandled() {
-    this.display = "none";
-  }
+  //Open sidenav menu
+  sideCollapsed: boolean = false;
+
+  //Toggle Nav Menu
+  toggleMenu() {
+      this.collapsed = !this.collapsed;
+   }
+
+   //Toggle Sidenav Menu
+   public toggleSideMenu = () => {
+    this.sideNavToggle.emit();
+    //this.sideCollapsed  =!this.sideCollapsed;
+ }
+
+  ngOnInit() {}
 
   // Later might add a confirm dialog to ensure user wants to logout
   public onLogoutClick() {
