@@ -1,9 +1,13 @@
+mat-toolbar {
+  background-color: #febc11;
+}
+
 .navbar {
     overflow: hidden;
     background-color: #febc11;
     padding: 2px 10px;
     height: auto;
-    z-index: 2;
+    /*z-index: 2;*/
     top: 0px;
   }
 
@@ -79,78 +83,55 @@
     color: #fff;
   }
 
-  /*New Edition
-  header {
-    width: 100%;
-    height: auto;
+  /*Responsive View*/
+/* For Mobile devices */
+@media screen and (min-width: 320px)
+and (max-width: 480px) { 
+  .navbar {
+    flex-wrap: nowrap;
+  }
+
+  .navbar .show {
+    display: flex;
+    margin-top: 5px;
+    flex-direction: column;
+    overflow: visible;
     background-color: #febc11;
-    overflow-x: hidden;
+  }
+}
+
+  /* For Tablets or iPad */
+@media screen and (min-width: 480px)
+and (max-width: 768px) { 
+  .navbar {
+    flex-wrap: nowrap;
   }
 
-  a {
-    text-decoration: none;
-    color: #fff;
+  nav {
+    flex-direction: column;
   }
 
-  a:hover {
-    color: #fff;
-  }
-  
-  header .container-fluid {
-      width: 100%;
-      padding: 0px 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-  header .side-nav-button {
+  ul li{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    cursor: pointer;
-    text-decoration: none;
+    margin-top: 5px;
+    flex-direction: column;
+    overflow: visible;
+    background-color: #febc11;
+  }
+}
+
+ /* Laptop or small-size screen */
+@media screen and (min-width: 769px)
+and (max-width: 1024px) { 
+  .navbar {
+    flex-wrap: nowrap;
   }
 
-  header .side-nav-button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 30%;
-  }
-
-  header .navbar-logo .navbar-brand{
-    font-size: large;
-    color: #333;
-    font-weight: bold;
-    width: 140px;
-    height: 66px;
+  .navbar .show {
     display: flex;
-    align-items: center;
-    /*margin-right: 30rem;
+    margin-top: 5px;
+    flex-direction: column;
+    overflow: visible;
+    background-color: #febc11;
   }
-
-  header .nav-items {
-    display: flex;
-    align-items: center;
-    letter-spacing: 3px;
-  }
-
-  header .item {
-    text-align: center;
-    color: #fff;
-    padding: 5px 10px;
-    transition: all .1s ease;
-  }
-
-  header .item:hover {
-    border-bottom: 3px solid #333;
-    transition: all .1s ease-out;
-  }
-
-  header .item-button a {
-    width: 100px;
-    margin-left: 3px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }*/
+ }

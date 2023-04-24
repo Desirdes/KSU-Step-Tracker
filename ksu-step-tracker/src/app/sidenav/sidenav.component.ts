@@ -1,21 +1,25 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css']
 })
-export class SidenavComponent implements OnInit, OnChanges {
-  @Input() subMenuState;
+export class SidenavComponent implements OnInit {
+
+  @Output() sidenavClose = new EventEmitter();
+
+  public sideNavClose = ()=> {
+    this.sidenavClose.emit();
+  }
+
+  /*@Input() subMenuState;
   constructor() { }
   opened: boolean;
-  showMenu = true;
+  showMenu = true;*/
 
-  ngOnInit() {
-  }
 
-  ngOnChanges(){
-    console.log("inside ngOnChanges with subMenuState: ",this.subMenuState );
-    this.showMenu = this.subMenuState;
-  }
+
+  ngOnInit() {}
 }
