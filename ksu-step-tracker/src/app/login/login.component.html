@@ -3,7 +3,7 @@
   <div class="mask d-flex align-items-center h-100 gradient-custom-3">
     <div class="container h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6" *ngIf="!this.resetPassword">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
               <h2 class="text-uppercase text-center mb-5">Login</h2>
@@ -11,29 +11,74 @@
               <form [formGroup]="loginForm">
 
                 <div class="form-group form-outline mb-4">
-                  <input type="text" id="username" class="form-control form-control-lg" formControlName="username" [ngClass]="{error : getControl('username')?.errors && getControl('username')?.touched}"/>
+                  <input type="text" id="username" class="form-control form-control-lg" formControlName="username" [ngClass]="{error : getControl('username')?.errors && getControl('username')?.touched}" />
                   <label class="form-label" for="LoginForm">Username</label>
                   <div *ngIf="getControl('username')?.errors && getControl('username')?.touched">
                     <small class="text-danger" *ngIf="getControl('username')?.errors?.['required']">Username is required</small>
-                </div>
+                  </div>
                 </div>
 
                 <div class="form-group form-outline mb-4">
-                  <input type="password" id="password" class="form-control form-control-lg" formControlName="password" [ngClass]="{error : getControl('password')?.errors && getControl('password')?.touched}"/>
+                  <input type="password" id="password" class="form-control form-control-lg" formControlName="password" [ngClass]="{error : getControl('password')?.errors && getControl('password')?.touched}" />
                   <label class="form-label" for="LoginForm">Password</label>
                   <div *ngIf="getControl('password')?.errors && getControl('password')?.touched">
                     <small class="text-danger" *ngIf="getControl('password')?.errors?.['required']">Password is required</small>
-                </div>
+                  </div>
 
                 </div>
 
                 <div class="d-flex justify-content-center">
                   <button type="button"
-                    class="btn btn-warning btn-block btn-lg text-body" [disabled]="loginForm.status === 'INVALID'" (click)="onsubmit()">Login</button>
+                          class="btn btn-warning btn-block btn-lg text-body" [disabled]="loginForm.status === 'INVALID'" (click)="onsubmit()">
+                    Login
+                  </button>
                 </div>
 
-                <p class="text-center text-muted mt-5 mb-0">Don't have an account yet? <a [routerLink]="['/signup']"
-                    class="fw-bold text-body"><u>Signup here</u></a></p>
+                <p class="text-center text-muted mt-5 mb-0">
+                  Don't have an account yet? <a [routerLink]="['/signup']"
+                                                class="fw-bold text-body"><u>Signup here</u></a>
+                </p>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6" *ngIf="this.resetPassword">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5">Reset Password</h2>
+
+              <form [formGroup]="passwordResetForm">
+
+                <div class="form-outline mb-4">
+                  <input type="password" id="password" class="form-control form-control-lg" formControlName="password" [ngClass]="{error : getControlResetPassword('password')?.errors && getControlResetPassword('password')?.touched}" />
+                  <label class="form-label" for="password">Password</label>
+                  <div *ngIf="getControlResetPassword('password')?.errors && getControlResetPassword('password')?.touched">
+                    <small class="text-danger" *ngIf="getControlResetPassword('password')?.errors?.['required']">Password is required</small>
+                    <small class="text-danger" *ngIf="getControlResetPassword('password')?.errors?.['minlength']">Password must have at least 6 characters</small>
+                  </div>
+                  <div class="small-text">
+                    <small>must have at least 6 characters</small>
+                  </div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="password" id="confirmPassword" class="form-control form-control-lg" formControlName="confirmPassword" [ngClass]="{error : getControlResetPassword('confirmPassword')?.errors && getControlResetPassword('confirmPassword')?.touched}" />
+                  <label class="form-label" for="confirmPassword">Confirm password</label>
+                  <div *ngIf="getControlResetPassword('confirmPassword')?.errors && getControlResetPassword('confirmPassword')?.touched">
+                    <small class="text-danger" *ngIf="getControlResetPassword('confirmPassword')?.errors?.['required']">Password is required</small>
+                    <small class="text-danger" *ngIf="getControlResetPassword('confirmPassword')?.errors?.['MustMatch']">Password don't match</small>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button type="button"
+                          class="btn btn-warning btn-block btn-lg text-body" [disabled]="passwordResetForm.status === 'INVALID'" (click)="this.onResetPasswordClick()">
+                    Change Password
+                  </button>
+                </div>
 
               </form>
 

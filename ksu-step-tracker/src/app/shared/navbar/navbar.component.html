@@ -1,7 +1,7 @@
 <!-- Navbar -->
 <div class="navbar navbar-expand-lg fixed-top">
   <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
-  <a [routerLink]="this.appComponent.loggedIn? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Step Tracker</a>
+  <a class="navbar-brand">KSU Weightloss Step Tracker</a>
   <nav class="navbar navbar-expand-lg pull-right">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.currentPerson">

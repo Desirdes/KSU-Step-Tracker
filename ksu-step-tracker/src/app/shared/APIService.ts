@@ -169,6 +169,28 @@ export class APIService {
     }
   }
 
+  // Reset password
+  public async resetPassword(username, password) {
+    var data = {
+      username: username,
+      password: password
+    };
+    var body = JSON.stringify(data);
+    const response = await fetch(this.rootURL + '/access/password-reset', {
+      method: 'POST',
+      body: body,
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth }
+    });
+
+    if (response.ok) {
+      return Promise.resolve();
+    } else {
+      // Get text for error message
+      const errorText = await response.text();
+      return Promise.reject("Error " + response.status + ": " + errorText);
+    }
+  }
+
   // Patch person data
   public async patchPersonData(personID, personData){
     var data = {

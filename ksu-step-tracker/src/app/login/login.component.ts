@@ -18,14 +18,46 @@ export class LoginComponent{
     private appComponent: AppComponent
   ) { }
 
+  public resetPassword = false;
+
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]]
   })
 
+  passwordResetForm = this.fb.group({
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]]
+  },
+
+  {
+    validator: this.MustMatch('password', 'confirmPassword')
+  })
+
   getControl(name:any) : AbstractControl | null {
     return this.loginForm.get(name)
+  }
 
+  getControlResetPassword(name: any): AbstractControl | null {
+    return this.passwordResetForm.get(name)
+  }
+
+  //Must Match Validator function
+  MustMatch(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+
+      if (matchingControl.errors && !matchingControl.errors['MustMatch']) {
+        return
+      }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ MustMatch: true });
+      }
+      else {
+        matchingControl.setErrors(null)
+      }
+    }
   }
 
   //For backend
@@ -34,6 +66,29 @@ export class LoginComponent{
 
   public onsubmit() {
     this.loginUser();
+  }
+
+  public async onResetPasswordClick() {
+    await this.apiService.resetPassword(this.appComponent.currentPerson.username, this.passwordResetForm.get('password').value).then(async response => {
+      // If the password was reset then finish setting things up for them and update user auth
+      this.apiService.userBasicAuth = btoa(this.appComponent.currentPerson.username + ":" + this.passwordResetForm.get('password').value);
+
+      // If user is not an admin but their biometrics have not been recorded then redirect to questions
+      if (!this.appComponent.currentPerson.biometrics.length) {
+        this.router.navigate(['/questionnaire']);
+      } else {
+        // Sort by order of date steps were done, latest to oldest
+        this.appComponent.currentPerson.activities.sort((a, b) => {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        });
+
+        // Route to dashboard
+        this.router.navigate(['/user-dashboard']);
+      }
+    }, error => {
+      console.log("error: " + error);
+      // handle error here
+    });
   }
 
   private async loginUser(){
@@ -55,18 +110,24 @@ export class LoginComponent{
           this.appComponent.currentPerson = getPersonResponse;
           this.appComponent.loggedIn = true;
 
-          // If user is not an admin but their biometrics have not been recorded then redirect to questions
-          if (!getPersonResponse.biometrics.length) {
-            this.router.navigate(['/questionnaire']);
+          // Check if the user needs to update their password
+          if (loginResponse.resetPassword) {
+            this.resetPassword = true;
           } else {
-            // Sort by order of date steps were done, latest to oldest
-            this.appComponent.currentPerson.activities.sort((a, b) => {
-              return new Date(b.date).getTime() - new Date(a.date).getTime();
-            });
+            // If user is not an admin but their biometrics have not been recorded then redirect to questions
+            if (!getPersonResponse.biometrics.length) {
+              this.router.navigate(['/questionnaire']);
+            } else {
+              // Sort by order of date steps were done, latest to oldest
+              this.appComponent.currentPerson.activities.sort((a, b) => {
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+              });
 
-            // Route to dashboard
-            this.router.navigate(['/user-dashboard']);
+              // Route to dashboard
+              this.router.navigate(['/user-dashboard']);
+            }
           }
+          
         }, error => {
           console.log("error: " + error);
           // handle error here
