@@ -2,69 +2,7 @@
 <div class="navbar navbar-expand-lg fixed-top">
   <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
   <a [routerLink]="this.appComponent.loggedIn? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Step Tracker</a>
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-      </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-  <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
-  <a [routerLink]="this.appComponent.currentPerson? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Tracker</a>
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseHandled()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCloseHandled()">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCloseHandled()">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-  <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
-  <a [routerLink]="this.appComponent.currentPerson? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Tracker</a>
-
-    </mat-toolbar-row>
-  </mat-toolbar>
-  <!--<mat-sidenav-container class="sidenav-container" autosize>
-    <mat-sidenav #sidenav opened="true" mode="side" role="navigation">
-          <mat-nav-list class="sidenav-nav-item">
-            <a mat-list-item class="sidenav-nav-link" [routerLink]="['/user-profile']">
-                <i class="fa fa-user" aria-hidden="true" style="color: #fff;"></i>
-                <span class="sidenav-link-text">Profile</span>
-            </a>
-            <a mat-list-item class="sidenav-nav-link" [routerLink]="['/add-steps']">
-              <i class="fa fa-plus" aria-hidden="true" style="color: #fff;"></i>
-              <span class="sidenav-link-text">Add Steps</span>
-            </a>
-            <a mat-list-item class="sidenav-nav-link" [routerLink]="['/progress']">
-              <i class="fa fa-tasks" aria-hidden="true" style="color: #fff;"></i>
-              <span class="sidenav-link-text">Progress</span>
-            </a>
-          </mat-nav-list>
-    </mat-sidenav>
-  </mat-sidenav-container>-->
-  <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
-  <!--<a [routerLink]="this.appComponent.currentPerson? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Tracker</a>-->
-
   <nav class="navbar navbar-expand-lg pull-right">
-    <button class="navbar-toggler" type="button" (click)="toggleMenu()">
-      <i class="navbar-toggler-icon"></i>
-    </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.currentPerson">
         <li class="nav-item">
@@ -84,16 +22,6 @@
           </div>
         </li>
         <li class="nav-item">
-          <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'user-dashboard'">
-            Dashboard
-          </button>
-        </li>
-        <li class="nav-item">
-          <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'questionnaire'">
-            Questionnaire
-          </button>
-        </li>
-        <li class="nav-item">
           <button type="button" class="btn btn-dark me-3" (click)="this.onLogoutClick()">
             Logout
           </button>
@@ -102,63 +30,3 @@
     </div>
   </nav>
 </div>
-
-<!--<header>
-  <div class="container-fluid">
-    <div class="side-nav-button p-2 me-3 text-dark">
-      <button type="button" class="btn btn-link text-dark" (click)="toggleMenu()" >
-        <i class="fa-solid fa-bars"></i>
-      </button>
-    </div>
-  
-    <div class="navbar-logo pull-left">
-      <a [routerLink]="['']" class="navbar-brand">KSU Weightloss Tracker</a>
-    </div>
-  
-    <div class="nav-items pull-right">
-      <div class="item">
-        <a [routerLink]="['login']">Login</a>
-      </div>
-      <div class="item-button">
-        <a [routerLink]="['signup']" type="button" class="btn btn-dark me-3">Sign up</a>
-      </div>
-      <div class="item">
-        <a [routerLink]="['user-dashboard']">Dashboard</a>
-      </div>
-      <div class="item">
-        <a [routerLink]="['questionnaire']">Questionnaire</a>
-      </div>
-    </div>
-
-     Button trigger modal 
-    <div class="mobile-toggler d-lg-none">
-      <a [routerLink]="[]" (click)="openModal()" data-bs-toggle="modal" data-bs-target="#navModal">
-        <i class="fa-solid fa-bars"></i>
-      </a>
-    </div>
-
- Modal 
-<div class="modal fade" id="navModal" tabindex="-1" role="dialog" aria-labelledby="navModalLabel" aria-hidden="true">
-  <div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}"></div>
-  <div class="modal-dialog" role="document" >
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseHandled()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCloseHandled()">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-  </div>
-</header>-->
-
-
