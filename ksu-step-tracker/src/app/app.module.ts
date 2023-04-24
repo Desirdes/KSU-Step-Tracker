@@ -25,7 +25,7 @@ import { ChartComponent } from './chart/chart.component';
 import { NgChartsModule } from 'ng2-charts';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { UpdateBiometricsDialog, UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { UpdateBiometricsDialog, UpdatePersonalInfoDialog, UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AddStepsComponent } from './add-steps/add-steps.component';
 import { ProgressComponent } from './progress/progress.component';
@@ -54,7 +54,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     SidenavComponent,
     AddStepsComponent,
     ProgressComponent,
-    UpdateBiometricsDialog
+    UpdateBiometricsDialog,
+    UpdatePersonalInfoDialog
   ],
   imports: [
     BrowserModule,

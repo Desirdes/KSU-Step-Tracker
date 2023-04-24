@@ -338,6 +338,42 @@ export class UserDashboardComponent implements OnInit{
     });
   }
 
+  public onUpdatePersonalInfo() {
+    const dialogRef = this.dialog.open(UpdatePersonalInfoDialog, {
+      data: {
+        personID: this.currentPerson.id,
+        full_name: this.currentPerson.full_name,
+        email: this.currentPerson.email,
+        demographic: this.currentPerson.demographic,
+        gender: this.currentPerson.gender,
+        age: this.currentPerson.age
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result == true) {
+        // Get updated person data
+        await this.apiService.getPersonData(this.currentPerson.id).then(async getPersonResponse => {
+          this.appComponent.currentPerson = getPersonResponse;
+          if (getPersonResponse.activities == null) {
+            this.appComponent.currentPerson.activities = [];
+          } else {
+            this.appComponent.currentPerson.activities = getPersonResponse.activities.sort((a, b) => {
+              return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
+          }
+
+          // Make sure local variable is also updated
+          this.currentPerson = this.appComponent.currentPerson;
+
+        }, error => {
+          console.log("error: " + error);
+          // handle error here
+        });
+      }
+    });
+  }
+
   ngOnInit(): void {
     // If user is not logged in kick to login
     if (!this.appComponent.loggedIn) {
@@ -368,7 +404,7 @@ export class UserDashboardComponent implements OnInit{
   }
 }
 
-export interface DialogData {
+export interface BiometricsDialogData {
   personID: number;
   gender: String;
   bodyFatPercentage: number;
@@ -388,7 +424,7 @@ export class UpdateBiometricsDialog {
     public dialogRef: MatDialogRef<UpdateBiometricsDialog>,
     private appComponent: AppComponent,
     private apiService: APIService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: BiometricsDialogData,
   ) { }
 
   public targetWeight = 0;
@@ -469,6 +505,44 @@ export class UpdateBiometricsDialog {
       this.stepsPerDay = +this.stepsPerDay.toFixed(0);
     }
   }
+}
 
+export interface PersonalInfoDialogData {
+  personID: number;
+  full_name: String;
+  email: string;
+  demographic: string;
+  gender: string;
+  age: number;
+}
 
+@Component({
+  selector: 'update-personal-info-dialog',
+  templateUrl: 'update-personal-info-dialog.html',
+})
+export class UpdatePersonalInfoDialog {
+  constructor(
+    public dialogRef: MatDialogRef<UpdatePersonalInfoDialog>,
+    private appComponent: AppComponent,
+    private apiService: APIService,
+    @Inject(MAT_DIALOG_DATA) public data: PersonalInfoDialogData,
+  ) { }
+
+  onCancelClick(): void {
+    this.dialogRef.close();
+  }
+
+  onSubmitClick(): void {
+    this.updatePersonalInfoData();
+  }
+
+  private async updatePersonalInfoData() {
+    // Update PersonalInfo for this user
+    await this.apiService.patchPersonData(this.data.personID, this.data).then(async targetDataResponse => {
+      this.dialogRef.close(true);
+    }, error => {
+      console.log("error: " + error);
+      // handle error here
+    });
+  }
 }

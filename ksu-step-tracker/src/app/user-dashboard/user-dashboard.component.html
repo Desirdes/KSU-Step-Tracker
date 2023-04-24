@@ -18,6 +18,15 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.email}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
                 <p class="mb-0">Sex</p>
               </div>
               <div class="col-sm-9">
@@ -71,7 +80,12 @@
             </div>
             <hr>
             <div class="row">
-              <div class="col-sm-12">
+              <div class="col-sm-6" style="display: flex; justify-content: center;">
+                <button mat-raised-button color="primary" (click)="this.onUpdatePersonalInfo()">
+                  Update Personal Info
+                </button>
+              </div>
+              <div class="col-sm-6" style="display: flex; justify-content: center;">
                 <button mat-raised-button color="primary" (click)="this.onUpdateBiometricsButtonClick()">
                   Update Biometrics
                 </button>
