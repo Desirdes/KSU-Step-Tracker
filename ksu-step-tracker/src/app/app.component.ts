@@ -31,6 +31,8 @@ export class AppComponent implements OnInit{
 
   userRoles = "";
 
+  loggedIn = false;
+
   // In case we need to test things on application init
   ngOnInit(){
 

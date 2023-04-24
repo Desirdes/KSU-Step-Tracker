@@ -40,10 +40,10 @@ export class NavbarComponent implements OnInit {
     this.display = "none";
   }
 
-  // Later might add a confirm dialog to ensure user wants to logout
   public onLogoutClick() {
     this.appComponent.currentPerson = null;
     this.appComponent.userRoles = "";
+    this.appComponent.loggedIn = false;
     this.router.navigate(["/login"]);
   }
 }

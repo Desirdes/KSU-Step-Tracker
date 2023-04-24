@@ -1,42 +1,14 @@
 <!-- Navbar -->
 <div class="navbar navbar-expand-lg fixed-top">
-  <div class="side-nav-button me-3 text-dark">
-    <button type="button" class="btn btn-link text-dark" 
-    (click)="openModal()" data-bs-toggle="modal" 
-    data-bs-target="#navModal">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-  </div>
-  <!--Modal -->
-<div class="modal fade" id="navModal" tabindex="-1" role="dialog" aria-labelledby="navModalLabel" aria-hidden="true">
-  <div class="modal" tabindex="-1" role="dialog"  [ngStyle]="{'display':display}"></div>
-  <div class="modal-dialog" role="document" >
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseHandled()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onCloseHandled()">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
   <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
-  <a [routerLink]="this.appComponent.currentPerson? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Tracker</a>
+  <a [routerLink]="this.appComponent.loggedIn? ['/user-dashboard'] : ['']" class="navbar-brand">KSU Weightloss Step Tracker</a>
 
   <nav class="navbar navbar-expand-lg pull-right">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.currentPerson">
+      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.loggedIn">
         <li class="nav-item">
           <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'login'">
             Login
@@ -45,21 +17,12 @@
             Sign up for free
           </button>
         </li>
-        <!--<li class="nav-item">
-          <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'user-dashboard'">
-            Dashboard
-          </button>
-        </li>
-        <li class="nav-item">
-          <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'questionnaire'">
-            Questionnaire
-          </button>
-        </li>-->
       </ul>
-      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="this.appComponent.currentPerson">
+      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="this.appComponent.loggedIn">
         <li class="nav-item">
+          <!-- Since only an Admin would be able to be logged in while not having any person data then we use 'Admin' as the displayed name -->
           <div class="nav-user-name-display">
-            Welcome, {{this.appComponent.currentPerson.full_name}}
+            Welcome, {{this.appComponent.currentPerson? this.appComponent.currentPerson.full_name : 'Admin'}}
           </div>
         </li>
         <li class="nav-item">

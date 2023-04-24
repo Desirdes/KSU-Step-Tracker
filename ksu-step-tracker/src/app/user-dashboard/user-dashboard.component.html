@@ -1,7 +1,7 @@
 <!--Sidebar Menu-->
 <app-sidenav [subMenuState]="subMenuState"></app-sidenav>
 <!--Main User Content-->
-<section style="background-color: #eee;">
+<section style="background-color: #eee;" *ngIf="this.currentPerson">
   <div class="container py-5">
     <div class="row">
       <div class="column" style="width: 50%;">
@@ -120,36 +120,217 @@
   </div>
 </section>
 
-<!--Admin Dashboard-->
-<section>
-  <table mat-table class="mat-elevation-z8 demo-table">
-    <!-- Position Column -->
-    <ng-container matColumnDef="demo-position">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
+<!--Pure Admin Dashboard-->
+<section style="background-color: #eee;" *ngIf="!this.currentPerson && this.showAdmin">
+  <div class="container py-5">
+    <div class="row">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Reset User Password</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <mat-label>User</mat-label>
+            <mat-select [(ngModel)]="this.selectedUserForPasswordReset">
+              <mat-option *ngFor="let user of this.personDataList" [value]="user">
+                {{user.username}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-raised-button [disabled]="!this.selectedUserForPasswordReset" (click)="this.onPasswordResetClick()">Reset Password</button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="row">
+      <!-- Latest Data Table -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Latest Metrics Per User</mat-card-title>
+          <button mat-raised-button (click)="this.onLatestUserMetricsReportClick()">Download Report</button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-table class="mat-elevation-z8" [dataSource]="dataSourceLatestData">
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="demo-name">
-      <th mat-header-cell *matHeaderCellDef> Email </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+            <ng-container matColumnDef="PersonID">
+              <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.PersonID}}</mat-cell>
+            </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="demo-weight">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
+            <ng-container matColumnDef="Username">
+              <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Username}}</mat-cell>
+            </ng-container>
 
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="demo-symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
+            <ng-container matColumnDef="Email">
+              <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Email}}</mat-cell>
+            </ng-container>
 
-    <!--<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
-  </table>
+            <ng-container matColumnDef="SignupDate">
+              <mat-header-cell *matHeaderCellDef>Signup Date</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.SignupDate}}</mat-cell>
+            </ng-container>
 
+            <ng-container matColumnDef="Age">
+              <mat-header-cell *matHeaderCellDef>Age</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Age}}</mat-cell>
+            </ng-container>
 
+            <ng-container matColumnDef="Sex">
+              <mat-header-cell *matHeaderCellDef>Sex</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Sex}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Race">
+              <mat-header-cell *matHeaderCellDef>Race</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Race}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="LatestHeight">
+              <mat-header-cell *matHeaderCellDef>Latest Height (inches)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.LatestHeight}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="LatestWeight">
+              <mat-header-cell *matHeaderCellDef>Latest Weight (lbs)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.LatestWeight}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="LatestWaistCircumference">
+              <mat-header-cell *matHeaderCellDef>Latest Waist Circumference (inches)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.LatestWaistCircumference}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="LatestNeckCircumference">
+              <mat-header-cell *matHeaderCellDef>Latest Neck Circumference (inches)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.LatestNeckCircumference}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="LatestBodyFatPercentage">
+              <mat-header-cell *matHeaderCellDef>Latest Body Fat Percentage (%)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.LatestBodyFatPercentage}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="LatestTargetWeightLossPercentage">
+              <mat-header-cell *matHeaderCellDef>Latest Target Weight Loss Percentage (%)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.LatestTargetWeightLossPercentage}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="DateBiometricsUpdated">
+              <mat-header-cell *matHeaderCellDef>Date Biometrics Updated</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.DateBiometricsUpdated}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="AvgStepsPerDataEntry">
+              <mat-header-cell *matHeaderCellDef>Average Steps Per Data Entry</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDataEntry}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="AvgStepsPerDay">
+              <mat-header-cell *matHeaderCellDef>Average Steps Per Day Across Research Period</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDay}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsLatestData"></mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: displayedColumnsLatestData"></mat-row>
+
+          </mat-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="row">
+      <!-- Full Data Table -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Full Metrics History Per User</mat-card-title>
+          <button mat-raised-button (click)="this.onFullUserBiometricHistoryReportClick()">Download Report</button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-table class="mat-elevation-z8" [dataSource]="dataSourceFullData">
+
+            <ng-container matColumnDef="PersonID">
+              <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.PersonID}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Username">
+              <mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Username}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Email">
+              <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Email}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="SignupDate">
+              <mat-header-cell *matHeaderCellDef>Signup Date</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.SignupDate}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Age">
+              <mat-header-cell *matHeaderCellDef>Age</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Age}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Sex">
+              <mat-header-cell *matHeaderCellDef>Sex</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Sex}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Race">
+              <mat-header-cell *matHeaderCellDef>Race</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Race}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Height">
+              <mat-header-cell *matHeaderCellDef>Height (inches)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Height}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Weight">
+              <mat-header-cell *matHeaderCellDef>Weight (lbs)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.Weight}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="WaistCircumference">
+              <mat-header-cell *matHeaderCellDef>Waist Circumference (inches)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.WaistCircumference}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="NeckCircumference">
+              <mat-header-cell *matHeaderCellDef>Neck Circumference (inches)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.NeckCircumference}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="BodyFatPercentage">
+              <mat-header-cell *matHeaderCellDef>Body Fat Percentage (%)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.BodyFatPercentage}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="TargetWeightLossPercentage">
+              <mat-header-cell *matHeaderCellDef>Target Weight Loss Percentage (%)</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.TargetWeightLossPercentage}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="DateBiometricsUpdated">
+              <mat-header-cell *matHeaderCellDef>Date Biometrics Updated</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.DateBiometricsUpdated}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="AvgStepsPerDataEntryForBiometricPeriod">
+              <mat-header-cell *matHeaderCellDef>Average Steps Per Data Entry Related To This Biometric Data</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDataEntryForBiometricPeriod}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsFullData"></mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: displayedColumnsFullData"></mat-row>
+
+          </mat-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 </section>

@@ -5,6 +5,45 @@ import { APIService } from '../shared/APIService';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BiometricData, Person, TargetData } from '../shared/models/UserData.model';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+
+// Admin report table interfaces
+export interface LatestDataRow {
+  PersonID: number;
+  Username: string;
+  Email: string;
+  SignupDate: string;
+  Age: number;
+  Sex: string;
+  Race: string;
+  LatestHeight: number;
+  LatestWeight: number;
+  LatestWaistCircumference: number;
+  LatestNeckCircumference: number;
+  LatestBodyFatPercentage: number;
+  LatestTargetWeightLossPercentage: number;
+  DateBiometricsUpdated: string;
+  AvgStepsPerDataEntry: number;
+  AvgStepsPerDay: number;
+}
+
+export interface FullDataRow {
+  PersonID: number;
+  Username: string;
+  Email: string;
+  SignupDate: string;
+  Age: number;
+  Sex: string;
+  Race: string;
+  Height: number;
+  Weight: number;
+  WaistCircumference: number;
+  NeckCircumference: number;
+  BodyFatPercentage: number;
+  TargetWeightLossPercentage: number;
+  DateBiometricsUpdated: string;
+  AvgStepsPerDataEntryForBiometricPeriod: number;
+}
 
 @Component({
   selector: 'app-user-dashboard',
@@ -21,6 +60,7 @@ export class UserDashboardComponent implements OnInit{
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private appComponent: AppComponent,
     private apiService: APIService,
@@ -30,11 +70,26 @@ export class UserDashboardComponent implements OnInit{
   public currentPerson = this.appComponent.currentPerson;
   public latestActivityDate = new Date().toDateString();
 
+  public personDataList = null;
+  public selectedUserForPasswordReset = null;
+
   public showCharts = false;
 
-  //min & max Date
+  public showAdmin = false;
+
+  //min & max Date for viable research data
   public minDate: Date;
   public maxDate: Date;
+
+  public displayedColumnsLatestData = ['PersonID', 'Username', 'Email', 'SignupDate', 'Age', 'Sex', 'Race', 'LatestHeight', 'LatestWeight',
+    'LatestWaistCircumference', 'LatestNeckCircumference', 'LatestBodyFatPercentage',
+    'LatestTargetWeightLossPercentage', 'DateBiometricsUpdated', 'AvgStepsPerDataEntry', 'AvgStepsPerDay'];
+  public dataSourceLatestData = new MatTableDataSource<LatestDataRow>();
+
+  public displayedColumnsFullData = ['PersonID', 'Username', 'Email', 'SignupDate', 'Age', 'Sex', 'Race', 'Height', 'Weight',
+    'WaistCircumference', 'NeckCircumference', 'BodyFatPercentage',
+    'TargetWeightLossPercentage', 'DateBiometricsUpdated', 'AvgStepsPerDataEntryForBiometricPeriod'];
+  public dataSourceFullData = new MatTableDataSource<FullDataRow>();
 
   //Steps Form Builder & Form Group
   public addStepsForm = this.fb.group({
@@ -77,128 +132,148 @@ export class UserDashboardComponent implements OnInit{
     });
   }
 
-  public async getAllPersonDataAndExportToCSV(reportStyle) {
+  public async getAllPersonDataForTables() {
     await this.apiService.getAllPersonData().then(async response => {
+      this.personDataList = response;
 
-      var filename = "";
-      var headers = [];
-      var rows = [];
-      // Check what type of report should be generated
-      switch (reportStyle) {
-        // Report for latest metrics for each user
-        case "latestMetricsAndAverageSteps":
-          filename = 'LatestUserMetricsReport.csv';
-          headers = ['PersonID', 'Signup Date', 'Age', 'Sex', 'Race', 'Latest Height', 'Latest Weight',
-            'Latest Waist Circumference', 'Latest Neck Circumference', 'Latest Body Fat Percentage',
-            'Latest Target Weight Loss Percentage', 'Date Biometrics Updated', 'Average Steps Per Data Entry', 'Average Steps Per Day Accross Research Period'];
-          response.forEach(person => {
-            var signupDate = new Date(person.signupDate);
-            var rowData = {
+      response.forEach(person => {
+        //check that person has biometrics on record, if not then the user is incomplete and will not be displayed
+        if (person.biometrics && person.biometrics.length) {
+          var signupDate = new Date(person.signupDate);
+
+          // Latest data
+          var latestData = {
+            PersonID: person.id,
+            Username: person.username,
+            Email: person.email,
+            SignupDate: signupDate.toLocaleString(),
+            Age: person.age,
+            Sex: person.gender,
+            Race: person.demographic,
+            LatestHeight: person.biometrics[person.biometrics.length - 1].height,
+            LatestWeight: person.biometrics[person.biometrics.length - 1].weight,
+            LatestWaistCircumference: person.biometrics[person.biometrics.length - 1].waistCircumference,
+            LatestNeckCircumference: person.biometrics[person.biometrics.length - 1].neckCircumference,
+            LatestBodyFatPercentage: person.biometrics[person.biometrics.length - 1].bodyFatPercentage,
+            LatestTargetWeightLossPercentage: person.targets[person.targets.length - 1].weightLossPercentage,
+            DateBiometricsUpdated: new Date(person.biometrics[person.biometrics.length - 1].dateUpdated).toLocaleString(),
+            AvgStepsPerDataEntry: 0,
+            AvgStepsPerDay: 0
+          };
+          // Check if person has any recorded activity and calculate averages as needed
+          if (person.activities && person.activities.length) {
+            var totalSteps = 0;
+            person.activities.forEach(dataEntry => {
+              totalSteps += dataEntry.steps;
+            });
+
+            latestData.AvgStepsPerDataEntry = +(totalSteps / person.activities.length).toFixed(0);
+
+            const today = new Date();
+            // Viable data entry days from moment of signup to today, converting from milliseconds to days
+            var potentialDataEntryDays = (today.getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24);
+            // The study only cares about up to a year's worth of data
+            const researchPeriodLengthInDays = 365;
+
+            latestData.AvgStepsPerDay = +(totalSteps / Math.min(+potentialDataEntryDays.toFixed(0), researchPeriodLengthInDays)).toFixed(0);
+          }
+          this.dataSourceLatestData.data.push(latestData);
+
+          // Full data
+          person.biometrics.forEach((biometricData, index) => {
+            var updateDate = new Date(biometricData.dateUpdated).setHours(0, 0, 0, 0);
+            var fullData = {
               PersonID: person.id,
-              SignupDate: signupDate.toLocaleString(),
+              Username: person.username,
+              Email: person.email,
+              SignupDate: new Date(person.signupDate).toLocaleString(),
               Age: person.age,
               Sex: person.gender,
               Race: person.demographic,
-              LatestHeight: person.biometrics[person.biometrics.length - 1].height,
-              LatestWeight: person.biometrics[person.biometrics.length - 1].weight,
-              LatestWaistCircumference: person.biometrics[person.biometrics.length - 1].waistCircumference,
-              LatestNeckCircumference: person.biometrics[person.biometrics.length - 1].neckCircumference,
-              LatestBodyFatPercentage: person.biometrics[person.biometrics.length - 1].bodyFatPercentage,
-              LatestTargetWeightLossPercentage: person.targets[person.targets.length - 1].weightLossPercentage,
-              DateBiometricsUpdated: new Date(person.biometrics[person.biometrics.length - 1].dateUpdated).toLocaleString(),
-              AvgStepsPerDataEntry: 0,
-              AvgStepsPerDay: 0
+              Height: biometricData.height,
+              Weight: biometricData.weight,
+              WaistCircumference: biometricData.waistCircumference,
+              NeckCircumference: biometricData.neckCircumference,
+              BodyFatPercentage: biometricData.bodyFatPercentage,
+              // Targets and biometrics arrays are made side by side so the indexes will match
+              TargetWeightLossPercentage: person.targets[index].weightLossPercentage,
+              DateBiometricsUpdated: new Date(biometricData.dateUpdated).toLocaleString(),
+              AvgStepsPerDataEntryForBiometricPeriod: 0
             };
             // Check if person has any recorded activity and calculate averages as needed
             if (person.activities && person.activities.length) {
-              var totalSteps = 0;
-              person.activities.forEach(dataEntry => {
-                totalSteps += dataEntry.steps;
-              });
-
-              rowData.AvgStepsPerDataEntry = +(totalSteps / person.activities.length).toFixed(0);
-
+              var totalStepsInRange = 0;
+              var dataEntryCount = 0;
+              var nextEntryUpdateDate = new Date().setHours(0, 0, 0, 0);
               const today = new Date();
-              // Viable data entry days from moment of signup to today, converting from milliseconds to days
-              var potentialDataEntryDays = (today.getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24);
-              // The study only cares about up to a year's worth of data
-              const researchPeriodLengthInDays = 365;
-
-              rowData.AvgStepsPerDay = +(totalSteps / Math.min(+potentialDataEntryDays.toFixed(0), researchPeriodLengthInDays)).toFixed(0);
-            }
-            rows.push(rowData);
-          });
-          break;
-        case "allBiometricHistory":
-          filename = 'AllUserBiometricHistoryReport.csv';
-          headers = ['PersonID', 'Signup Date', 'Age', 'Sex', 'Race', 'Height', 'Weight',
-            'Waist Circumference', 'Neck Circumference', 'Body Fat Percentage',
-            'Target Weight Loss Percentage', 'Date Biometrics Updated', 'Average Steps Per Data Entry Related To This Biometric Data'];
-          response.forEach(person => {
-            person.biometrics.forEach((biometricData, index) => {
-              var updateDate = new Date(biometricData.dateUpdated).setHours(0, 0, 0, 0);
-              var rowData = {
-                PersonID: person.id,
-                SignupDate: new Date(person.signupDate).toLocaleString(),
-                Age: person.age,
-                Sex: person.gender,
-                Race: person.demographic,
-                Height: biometricData.height,
-                Weight: biometricData.weight,
-                WaistCircumference: biometricData.waistCircumference,
-                NeckCircumference: biometricData.neckCircumference,
-                BodyFatPercentage: biometricData.bodyFatPercentage,
-                // Targets and biometrics arrays are made side by side so the indexes will match
-                TargetWeightLossPercentage: person.targets[index].weightLossPercentage,
-                DateBiometricsUpdated: new Date(biometricData.dateUpdated).toLocaleString(),
-                AvgStepsPerDataEntryForBiometricPeriod: 0
-              };
-              // Check if person has any recorded activity and calculate averages as needed
-              if (person.activities && person.activities.length) {
-                var totalStepsInRange = 0;
-                var dataEntryCount = 0;
-                var nextEntryUpdateDate = new Date().setHours(0, 0, 0, 0);
-                const today = new Date();
-                // Viable data entry days based on how long the selected biometric data has been in use, converting from milliseconds to days
-                //Check if this is the latest entry
-                if (index == person.biometrics.length - 1) {
-                  person.activities.forEach(dataEntry => {
-                    var entryDate = new Date(dataEntry.date).setHours(0, 0, 0, 0);
-                    if (entryDate >= updateDate) {
-                      totalStepsInRange += dataEntry.steps;
-                      dataEntryCount += 1;
-                    }
-                  });
-                } else {
-                  nextEntryUpdateDate = new Date(person.biometrics[index + 1].dateUpdated).setHours(0, 0, 0, 0);
-                  person.activities.forEach(dataEntry => {
-                    var entryDate = new Date(dataEntry.date).setHours(0, 0, 0, 0);
-                    if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
-                      totalStepsInRange += dataEntry.steps;
-                      dataEntryCount += 1;
-                    }
-                  });
-                }
-
-                if (dataEntryCount != 0) {
-                  rowData.AvgStepsPerDataEntryForBiometricPeriod = +(totalStepsInRange / dataEntryCount).toFixed(0);
-                }
+              // Viable data entry days based on how long the selected biometric data has been in use, converting from milliseconds to days
+              //Check if this is the latest entry
+              if (index == person.biometrics.length - 1) {
+                person.activities.forEach(dataEntry => {
+                  var entryDate = new Date(dataEntry.date).setHours(0, 0, 0, 0);
+                  if (entryDate >= updateDate) {
+                    totalStepsInRange += dataEntry.steps;
+                    dataEntryCount += 1;
+                  }
+                });
+              } else {
+                nextEntryUpdateDate = new Date(person.biometrics[index + 1].dateUpdated).setHours(0, 0, 0, 0);
+                person.activities.forEach(dataEntry => {
+                  var entryDate = new Date(dataEntry.date).setHours(0, 0, 0, 0);
+                  if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
+                    totalStepsInRange += dataEntry.steps;
+                    dataEntryCount += 1;
+                  }
+                });
               }
-              rows.push(rowData);
-            });
-          });
-          break;
-        default:
-          break;
-      }
 
-      // Export data to a csv file report
-      this.apiService.exportToCsv(filename, rows, headers);
+              if (dataEntryCount != 0) {
+                fullData.AvgStepsPerDataEntryForBiometricPeriod = +(totalStepsInRange / dataEntryCount).toFixed(0);
+              }
+            }
+            this.dataSourceFullData.data.push(fullData);
+          });
+        }
+      });
+      // Refresh tables with gathered data
+      this.dataSourceLatestData.data = this.dataSourceLatestData.data;
+      this.dataSourceFullData.data = this.dataSourceFullData.data;
 
     }, error => {
       console.log("error: " + error);
       // handle error here
     });
+  }
+
+  public async getAllPersonDataAndExportToCSV(reportStyle) {
+    var filename = "";
+    var headers = [];
+    var rows = [];
+    // Check what type of report should be generated
+    switch (reportStyle) {
+      // Report for latest metrics for each user
+      case "latestMetricsAndAverageSteps":
+        filename = 'LatestUserMetricsReport.csv';
+        headers = ['PersonID', 'Username', 'Email', 'Signup Date', 'Age', 'Sex', 'Race', 'Latest Height (inches)', 'Latest Weight (lbs)',
+          'Latest Waist Circumference (inches)', 'Latest Neck Circumference (inches)', 'Latest Body Fat Percentage (%)',
+          'Latest Target Weight Loss Percentage (%)', 'Date Biometrics Updated', 'Average Steps Per Data Entry', 'Average Steps Per Day Across Research Period'];
+        
+        rows = this.dataSourceLatestData.data;
+        break;
+      case "allBiometricHistory":
+        filename = 'AllUserBiometricHistoryReport.csv';
+        headers = ['PersonID', 'Username', 'Email', 'Signup Date', 'Age', 'Sex', 'Race', 'Height (inches)', 'Weight (lbs)',
+          'Waist Circumference (inches)', 'Neck Circumference (inches)', 'Body Fat Percentage (%)',
+          'Target Weight Loss Percentage (%)', 'Date Biometrics Updated', 'Average Steps Per Data Entry Related To This Biometric Data'];
+          
+        rows = this.dataSourceFullData.data;
+        break;
+      default:
+        break;
+    }
+
+    // Export data to a csv file report
+    this.apiService.exportToCsv(filename, rows, headers);
   }
 
   public onUpdateBiometricsButtonClick() {
@@ -253,24 +328,42 @@ export class UserDashboardComponent implements OnInit{
     this.getAllPersonDataAndExportToCSV("allBiometricHistory");
   }
 
+  public async onPasswordResetClick() {
+    await this.apiService.flagUserForPasswordReset(this.selectedUserForPasswordReset.username, this.selectedUserForPasswordReset.email).then(async response => {
+      // Reset selection to empty
+      this.selectedUserForPasswordReset = null;
+    }, error => {
+      console.log("error: " + error);
+      // handle error here
+    });
+  }
+
   ngOnInit(): void {
-    if (this.currentPerson.activities && this.currentPerson.activities.length){
-      this.latestActivityDate = new Date(this.currentPerson.activities[0].date).toDateString();
-      this.showCharts = true;
-    }
+    // If user is not logged in kick to login
+    if (!this.appComponent.loggedIn) {
+      this.router.navigate(['/login']);
+    } else {
+      if (this.currentPerson && this.currentPerson.activities && this.currentPerson.activities.length){
+        this.latestActivityDate = new Date(this.currentPerson.activities[0].date).toDateString();
 
-    // Set the min and max date for adding steps.
-    const currentYear = new Date().getFullYear();
-    this.minDate = new Date(currentYear - 0, 0, 1);
-    this.maxDate = new Date(currentYear + 0, 11, 31);
+        // Set the min and max date for adding steps. We do it this way to avoid conflict with leap years.
+        const oneYearAsMS = 365 * 24 * 60 * 60 * 1000;
+        this.minDate = new Date(this.currentPerson.signupDate);
+        this.maxDate = new Date(this.minDate.getTime() + oneYearAsMS);
 
-    // Testing site can tell if user is admin
-    if (this.appComponent.userRoles.includes("ROLE_ADMIN")) {
-      console.log("Admin");
-      this.onLatestUserMetricsReportClick();
-      this.onFullUserBiometricHistoryReportClick();
-    } else{
-      console.log("User");
+        console.log(this.minDate);
+        console.log(this.maxDate);
+
+        this.showCharts = true;
+      }
+
+      // See if user is an Admin
+      if (this.appComponent.userRoles.includes("ROLE_ADMIN")) {
+        // Get table data
+        this.getAllPersonDataForTables();
+
+        this.showAdmin = true;
+      }
     }
   }
 }

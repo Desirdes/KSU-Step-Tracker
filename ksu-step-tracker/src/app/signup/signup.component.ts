@@ -70,22 +70,24 @@ export class SignupComponent {
       await this.apiService.signupUser(this.signupForm.get('name').value, this.signupForm.get('email').value, this.signupForm.get('username').value, this.signupForm.get('password').value).then(async signupResponse => {
         // Login user then send to questions
         await this.apiService.loginUser(this.signupForm.get('username').value, this.signupForm.get('password').value).then(loginResponse => {
-            // On successful login set the user basic auth
-            this.apiService.userBasicAuth = btoa(this.signupForm.get('username').value + ":" + this.signupForm.get('password').value);
+          // On successful login set the user basic auth
+          this.apiService.userBasicAuth = btoa(this.signupForm.get('username').value + ":" + this.signupForm.get('password').value);
 
-            this.appComponent.currentPerson = new Person();
+          this.appComponent.currentPerson = new Person();
 
-            // Set the personID and username for logged in user
-            this.appComponent.currentPerson.id = loginResponse.personID;
-            this.appComponent.currentPerson.username = loginResponse.username;
+          // Set the personID and username for logged in user
+          this.appComponent.currentPerson.id = loginResponse.personID;
+          this.appComponent.currentPerson.username = loginResponse.username;
 
-            this.appComponent.userRoles = loginResponse.roles;
+          this.appComponent.userRoles = loginResponse.roles;
 
-            // Route to questionnaire
-            this.router.navigate(['/questionnaire']);
-          }, error => {
-            console.log("error: " + error);
-              // handle error here
+          this.appComponent.loggedIn = true;
+
+          // Route to questionnaire
+          this.router.navigate(['/questionnaire']);
+        }, error => {
+          console.log("error: " + error);
+            // handle error here
         });
 
       }, error => {

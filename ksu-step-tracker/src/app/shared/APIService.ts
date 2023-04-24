@@ -26,7 +26,7 @@ export class APIService {
 
   // Get all persons' data
   public async getAllPersonData() {
-    const response = await fetch(this.rootURL + '/persons', {
+    const response = await fetch(this.rootURL + '/api/v1/admin/persons', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth }
     });
@@ -147,6 +147,28 @@ export class APIService {
     }
   }
 
+  // Flag user for password reset
+  public async flagUserForPasswordReset(username, email) {
+    var data = {
+      username: username,
+      email: email
+    };
+    var body = JSON.stringify(data);
+    const response = await fetch(this.rootURL + '/api/v1/admin/password-reset', {
+      method: 'POST',
+      body: body,
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth }
+    });
+
+    if (response.ok) {
+      return Promise.resolve();
+    } else {
+      // Get text for error message
+      const errorText = await response.text();
+      return Promise.reject("Error " + response.status + ": " + errorText);
+    }
+  }
+
   // Patch person data
   public async patchPersonData(personID, personData){
     var data = {
@@ -157,7 +179,7 @@ export class APIService {
       age: personData.age
     };
     var body = JSON.stringify(data);
-    const response = await fetch(this.rootURL + '/persons/' + personID, {
+    const response = await fetch(this.rootURL + '/api/v1/user/persons/' + personID, {
       method: 'PATCH',
       body: body,
       headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth}
@@ -182,7 +204,7 @@ export class APIService {
       weightLossPercentage: targetData.weightLossPercentage
     };
     var body = JSON.stringify(data);
-    const response = await fetch(this.rootURL + '/persons/' + personID + '/targets', {
+    const response = await fetch(this.rootURL + '/api/v1/user/persons/' + personID + '/targets', {
       method: 'POST',
       body: body,
       headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth}
@@ -205,7 +227,7 @@ export class APIService {
       waistCircumference: biometricData.waistCircumference
     };
     var body = JSON.stringify(data);
-    const response = await fetch(this.rootURL + '/persons/' + personID + '/biometrics', {
+    const response = await fetch(this.rootURL + '/api/v1/user/persons/' + personID + '/biometrics', {
       method: 'POST',
       body: body,
       headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth}
@@ -220,7 +242,7 @@ export class APIService {
 
   // Get person's data by ID
   public async getPersonData(personID){
-    const response = await fetch(this.rootURL + '/persons/' + personID, {
+    const response = await fetch(this.rootURL + '/api/v1/user/persons/' + personID, {
       method: 'GET',
       headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth}
     });
@@ -238,7 +260,7 @@ export class APIService {
 
   // Get all activity for person
   public async getAllActivity(personID){
-    const response = await fetch(this.rootURL + '/persons/' + personID + '/activities', {
+    const response = await fetch(this.rootURL + '/api/v1/user/persons/' + personID + '/activities', {
       method: 'GET',
       headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth}
     });
@@ -261,7 +283,7 @@ export class APIService {
       date: date
     };
     var body = JSON.stringify(data);
-    const response = await fetch(this.rootURL + '/persons/' + personID + '/activities', {
+    const response = await fetch(this.rootURL + '/api/v1/user/persons/' + personID + '/activities', {
       method: 'POST',
       body: body,
       headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth}

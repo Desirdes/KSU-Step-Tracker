@@ -12,7 +12,7 @@ import { Person, TargetData, BiometricData } from '../shared/models/UserData.mod
   styleUrls: ['./questionnaire.component.css'],
 })
 
-export class QuestionnaireComponent {
+export class QuestionnaireComponent implements OnInit {
   integerRegex = /^\d+$/
   integerRegexDecimal = /^\d*\.?\d*$/
 
@@ -149,6 +149,13 @@ export class QuestionnaireComponent {
       var stepsPerKGPerDay =  261425.4 / (Math.pow(this.targetBodyFatPercentage,1.8797));
       this.stepsPerDay = +stepsPerKGPerDay * ((+this.questionnaireForm.value.weight!/this.lbsConversionToKG) * (+this.questionnaireForm.value.bodyFatPercentage!/100));
       this.stepsPerDay = +this.stepsPerDay.toFixed(0);
+    }
+  }
+
+  ngOnInit(): void {
+    // If user is not logged in kick to login
+    if (!this.appComponent.loggedIn) {
+      this.router.navigate(['/login']);
     }
   }
 }

@@ -1,4 +1,64 @@
-<div [hidden]="!this.currentPerson.activities.length" class="chart-container">
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="bg-white rounded-lg p-5 shadow">
+        <h2 class="h6 font-weight-bold text-center mb-4">Weekly Step Progress</h2>
+
+        <!-- Progress bar 1 -->
+        <div class="progress mx-auto" id="circular-progress-bar-weekly">
+          <span class="progress-left" id="left-progress-weekly">
+            <span class="progress-bar border-primary" id="left-progress-bar-weekly"></span>
+          </span>
+          <span class="progress-right" id="right-progress-weekly">
+            <span class="progress-bar border-primary" id="right-progress-bar-weekly"></span>
+          </span>
+          <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            <i class="material-symbols-outlined">steps</i>
+            <div class="h2 font-weight-bold">{{this.currentWeeklyProgressPercentage}}%</div>
+          </div>
+        </div>
+        <!-- END -->
+        <!-- Demo info -->
+        <div class="row text-center mt-4">
+          <div class="col">
+            <div class="h4 font-weight-bold mb-0">{{this.lastWeekProgressPercentage}}%</div><span class="small text-gray">Last Week</span>
+          </div>
+        </div>
+        <!-- END -->
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+      <div class="bg-white rounded-lg p-5 shadow">
+        <h2 class="h6 font-weight-bold text-center mb-4">Monthly Step Progress</h2>
+
+        <!-- Progress bar 1 -->
+        <div class="progress mx-auto" id="circular-progress-bar-monthly">
+          <span class="progress-left" id="left-progress-monthly">
+            <span class="progress-bar border-primary" id="left-progress-bar-monthly"></span>
+          </span>
+          <span class="progress-right" id="right-progress-monthly">
+            <span class="progress-bar border-primary" id="right-progress-bar-monthly"></span>
+          </span>
+          <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+            <i class="material-symbols-outlined">steps</i>
+            <div class="h2 font-weight-bold">{{this.currentMonthlyProgressPercentage}}%</div>
+          </div>
+        </div>
+        <!-- END -->
+        <!-- Demo info -->
+        <div class="row text-center mt-4">
+          <div class="col">
+            <div class="h4 font-weight-bold mb-0">{{this.lastMonthProgressPercentage}}%</div><span class="small text-gray">Last Month</span>
+          </div>
+        </div>
+        <!-- END -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chart-container">
     <h2 class="title">Step Activity</h2>
     <canvas  id="MyChart">{{ lineChart }}</canvas>
 </div>

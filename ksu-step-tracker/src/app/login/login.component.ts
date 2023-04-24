@@ -39,29 +39,42 @@ export class LoginComponent{
   private async loginUser(){
     // Login user then send to dashboard
     await this.apiService.loginUser(this.loginForm.get('username').value, this.loginForm.get('password').value).then(async loginResponse => {
-        // On successful login set the user basic auth
-        this.apiService.userBasicAuth = btoa(this.loginForm.get('username').value + ":" + this.loginForm.get('password').value);
+      // On successful login set the user basic auth
+      this.apiService.userBasicAuth = btoa(this.loginForm.get('username').value + ":" + this.loginForm.get('password').value);
 
-        this.appComponent.userRoles = loginResponse.roles;
+      this.appComponent.userRoles = loginResponse.roles;
 
+      // If the login is correct and the user is an Admin without any person data then just set currentPerson to null and continue to dashboard
+      if (loginResponse.roles.includes("ROLE_ADMIN") && loginResponse.personID == null) {
+        this.appComponent.currentPerson = null;
+        this.appComponent.loggedIn = true;
+        this.router.navigate(['/user-dashboard']);
+      } else {
         await this.apiService.getPersonData(loginResponse.personID).then(async getPersonResponse => {
           // Update local variables for person data of user
           this.appComponent.currentPerson = getPersonResponse;
+          this.appComponent.loggedIn = true;
 
-          // Sort by order of date steps were done, latest to oldest
-          this.appComponent.currentPerson.activities.sort((a, b) => {
-            return new Date(b.date).getTime() - new Date(a.date).getTime();
-          });
+          // If user is not an admin but their biometrics have not been recorded then redirect to questions
+          if (!getPersonResponse.biometrics.length) {
+            this.router.navigate(['/questionnaire']);
+          } else {
+            // Sort by order of date steps were done, latest to oldest
+            this.appComponent.currentPerson.activities.sort((a, b) => {
+              return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
 
-          // Route to dashboard
-          this.router.navigate(['/user-dashboard']);
+            // Route to dashboard
+            this.router.navigate(['/user-dashboard']);
+          }
         }, error => {
           console.log("error: " + error);
           // handle error here
         });
-      }, error => {
-        console.log("error: " + error);
-          // handle error here
+      }
+    }, error => {
+      console.log("error: " + error);
+        // handle error here
     });
   }
 }

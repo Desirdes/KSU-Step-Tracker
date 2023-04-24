@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Chart, ChartDataset, ChartOptions } from 'chart.js';
-import { NgChartsModule } from 'ng2-charts/public_api';
-import { from } from 'rxjs';
 
 @Component({
   selector: 'app-progress',
@@ -10,12 +8,7 @@ import { from } from 'rxjs';
 })
 
 export class ProgressComponent implements OnInit{
-//Sidebar Menu
-  subMenuState:boolean = false;
-  burgerClicked(evnt){
-    this.subMenuState = evnt;
-    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
-  }
+
   
   ngOnInit(): void {
     this.updateProgressBar();
@@ -24,7 +17,6 @@ export class ProgressComponent implements OnInit{
     this.showMessage();
   }
   //Circle Progress Bar//
-
   public updateProgressBar() {
 
     var progressBar = document.getElementById('circular-progress-bar');
@@ -117,30 +109,30 @@ export class ProgressComponent implements OnInit{
         aspectRatio:2.5
       }
   });
-}
+  }
 
-public filterData() {
-  const dates2 = [...this.dates];
-  const startDate = <HTMLInputElement>document.getElementById('startDate');
-  const endDate = <HTMLInputElement>document.getElementById('endDate');
+  public filterData() {
+    const dates2 = [...this.dates];
+    const startDate = <HTMLInputElement>document.getElementById('startDate');
+    const endDate = <HTMLInputElement>document.getElementById('endDate');
 
-  //get index number in array
-  const indexStartDate = dates2.indexOf(startDate.value);
-  const indexEndDate = dates2.indexOf(endDate.value);
+    //get index number in array
+    const indexStartDate = dates2.indexOf(startDate.value);
+    const indexEndDate = dates2.indexOf(endDate.value);
 
-  //slice the array to only show selected section
-  const filterDate = dates2.slice(indexStartDate, indexEndDate + 1);
+    //slice the array to only show selected section
+    const filterDate = dates2.slice(indexStartDate, indexEndDate + 1);
 
-  //replace labels in chart
-  this.barChart.config.data.labels = filterDate;
+    //replace labels in chart
+    this.barChart.config.data.labels = filterDate;
 
-  //replace datapoints
-  const newdatapoints = [...this.datapoints];
-  const newdatapoints2 = [...this.datapoints2];
-  const filterDataPoints = newdatapoints.slice(indexStartDate, indexEndDate + 1);
-  const filterDataPoints2 = newdatapoints2.slice(indexStartDate, indexEndDate + 1);
-  this.barChart.config.data.datasets[0].data = filterDataPoints, filterDataPoints2;
+    //replace datapoints
+    const newdatapoints = [...this.datapoints];
+    const newdatapoints2 = [...this.datapoints2];
+    const filterDataPoints = newdatapoints.slice(indexStartDate, indexEndDate + 1);
+    const filterDataPoints2 = newdatapoints2.slice(indexStartDate, indexEndDate + 1);
+    this.barChart.config.data.datasets[0].data = filterDataPoints, filterDataPoints2;
 
-  this.barChart.update();
-}
+    this.barChart.update();
+  }
 }

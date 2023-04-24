@@ -25,6 +25,11 @@ import { UpdateBiometricsDialog, UserDashboardComponent } from './user-dashboard
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AddStepsComponent } from './add-steps/add-steps.component';
 import { ProgressComponent } from './progress/progress.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
@@ -64,6 +69,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
     NgCircleProgressModule.forRoot({
       "radius": 60,
       "space": -10,

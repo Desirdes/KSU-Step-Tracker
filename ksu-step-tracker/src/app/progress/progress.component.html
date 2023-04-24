@@ -1,4 +1,3 @@
-<app-sidenav [subMenuState]="subMenuState"></app-sidenav>
 <div class="container py-5">
   <div *ngIf="alert" class="alert alert-success alert-dismissible fade show" role="alert">
     <i class="fa-regular fa-thumbs-up"></i>
@@ -59,12 +58,6 @@
         </div>
         <!-- END -->
       </div>
-    </div>
-    <div class="chart-container">
-      <h2 class="title">Steps this Week</h2>
-      <canvas  id="MyBarChart">{{ barChart }}</canvas>
-      <input (change)="filterData()" ng-model="startDate" type="date" name="startDate" id="startDate" value="2023-04-02">
-      <input (change)="filterData()" ng-model="endDate" type="date" name="endDate" id="endDate" value="2023-04-08">
     </div>
   </div>
 </div>
