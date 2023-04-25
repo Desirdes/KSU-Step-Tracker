@@ -1,11 +1,14 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import {Router, ActivatedRoute, ParamMap} from "@angular/router";
 import { AppComponent } from '../app.component';
 import { APIService } from '../shared/APIService';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BiometricData, Person, TargetData } from '../shared/models/UserData.model';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { MatPaginator } from '@angular/material/paginator';
 
 // Admin report table interfaces
 export interface LatestDataRow {
@@ -50,14 +53,7 @@ export interface FullDataRow {
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css']
 })
-export class UserDashboardComponent implements OnInit{
-  //Sidebar Menu
-  subMenuState:boolean = false;
-  burgerClicked(evnt){
-    this.subMenuState = evnt;
-    console.log("inside burgerClicked: pls. change showMenu to be:",this.subMenuState);
-  }
-
+export class UserDashboardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -66,6 +62,19 @@ export class UserDashboardComponent implements OnInit{
     private apiService: APIService,
     public dialog: MatDialog
   ) { }
+
+  @ViewChild('latestPaginator') latestPaginator: MatPaginator;
+  @ViewChild('fullPaginator') fullPaginator: MatPaginator;
+
+  public applyFilterForLatest(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceLatestData.filter = filterValue.trim().toLowerCase();
+  }
+
+  public applyFilterForFull(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceFullData.filter = filterValue.trim().toLowerCase();
+  }
 
   public currentPerson = this.appComponent.currentPerson;
   public latestActivityDate = new Date().toDateString();
@@ -88,7 +97,7 @@ export class UserDashboardComponent implements OnInit{
 
   public displayedColumnsFullData = ['PersonID', 'Username', 'Email', 'SignupDate', 'Age', 'Sex', 'Race', 'Height', 'Weight',
     'WaistCircumference', 'NeckCircumference', 'BodyFatPercentage',
-    'TargetWeightLossPercentage', 'DateBiometricsUpdated', 'AvgStepsPerDataEntryForBiometricPeriod'];
+    'TargetWeightLossPercentage', 'DateBiometricsUpdated', 'AvgStepsPerDataEntryForBiometricPeriod', 'ActivityDate', 'ActivitySteps'];
   public dataSourceFullData = new MatTableDataSource<FullDataRow>();
 
   //Steps Form Builder & Form Group
@@ -179,60 +188,135 @@ export class UserDashboardComponent implements OnInit{
           }
           this.dataSourceLatestData.data.push(latestData);
 
-          // Full data
-          person.biometrics.forEach((biometricData, index) => {
-            var updateDate = new Date(biometricData.dateUpdated).setHours(0, 0, 0, 0);
-            var fullData = {
-              PersonID: person.id,
-              Username: person.username,
-              Email: person.email,
-              SignupDate: new Date(person.signupDate).toLocaleString(),
-              Age: person.age,
-              Sex: person.gender,
-              Race: person.demographic,
-              Height: biometricData.height,
-              Weight: biometricData.weight,
-              WaistCircumference: biometricData.waistCircumference,
-              NeckCircumference: biometricData.neckCircumference,
-              BodyFatPercentage: biometricData.bodyFatPercentage,
-              // Targets and biometrics arrays are made side by side so the indexes will match
-              TargetWeightLossPercentage: person.targets[index].weightLossPercentage,
-              DateBiometricsUpdated: new Date(biometricData.dateUpdated).toLocaleString(),
-              AvgStepsPerDataEntryForBiometricPeriod: 0
-            };
-            // Check if person has any recorded activity and calculate averages as needed
-            if (person.activities && person.activities.length) {
-              var totalStepsInRange = 0;
-              var dataEntryCount = 0;
-              var nextEntryUpdateDate = new Date().setHours(0, 0, 0, 0);
-              const today = new Date();
-              // Viable data entry days based on how long the selected biometric data has been in use, converting from milliseconds to days
-              //Check if this is the latest entry
-              if (index == person.biometrics.length - 1) {
-                person.activities.forEach(dataEntry => {
-                  var entryDate = new Date(dataEntry.date).setHours(0, 0, 0, 0);
-                  if (entryDate >= updateDate) {
-                    totalStepsInRange += dataEntry.steps;
-                    dataEntryCount += 1;
-                  }
-                });
-              } else {
-                nextEntryUpdateDate = new Date(person.biometrics[index + 1].dateUpdated).setHours(0, 0, 0, 0);
-                person.activities.forEach(dataEntry => {
-                  var entryDate = new Date(dataEntry.date).setHours(0, 0, 0, 0);
-                  if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
-                    totalStepsInRange += dataEntry.steps;
-                    dataEntryCount += 1;
-                  }
-                });
-              }
 
-              if (dataEntryCount != 0) {
-                fullData.AvgStepsPerDataEntryForBiometricPeriod = +(totalStepsInRange / dataEntryCount).toFixed(0);
+          // Full data
+          if (person.activities && person.activities.length) {
+            var activitiesArray = person.activities.sort((a, b) => {
+              return new Date(a.date).getTime() - new Date(b.date).getTime();
+            });
+            person.biometrics.forEach((biometricData, index) => {
+              var biometricHasViableActivity = false;
+              activitiesArray.forEach(dataEntry => {
+                var updateDate = new Date(biometricData.dateUpdated);
+                var fullData = {
+                  PersonID: person.id,
+                  Username: person.username,
+                  Email: person.email,
+                  SignupDate: new Date(person.signupDate).toLocaleString(),
+                  Age: person.age,
+                  Sex: person.gender,
+                  Race: person.demographic,
+                  Height: biometricData.height,
+                  Weight: biometricData.weight,
+                  WaistCircumference: biometricData.waistCircumference,
+                  NeckCircumference: biometricData.neckCircumference,
+                  BodyFatPercentage: biometricData.bodyFatPercentage,
+                  // Targets and biometrics arrays are made side by side so the indexes will match
+                  TargetWeightLossPercentage: person.targets[index].weightLossPercentage,
+                  DateBiometricsUpdated: new Date(biometricData.dateUpdated).toLocaleString(),
+                  AvgStepsPerDataEntryForBiometricPeriod: 0,
+                  ActivityDate: new Date(dataEntry.date).toLocaleString(),
+                  ActivitySteps: dataEntry.steps
+                };
+              
+                // Calculate averages as needed
+                var totalStepsInRange = 0;
+                var dataEntryCount = 0;
+                var nextEntryUpdateDate = new Date();
+                // Viable data entry days based on how long the selected biometric data has been in use, converting from milliseconds to days
+                //Check if this is the latest entry
+                if (index == person.biometrics.length - 1) {
+                  person.activities.forEach(dataEntry => {
+                    var entryDate = new Date(dataEntry.date);
+                    if (entryDate >= updateDate) {
+                      totalStepsInRange += dataEntry.steps;
+                      dataEntryCount += 1;
+                    }
+                  });
+                } else {
+                  nextEntryUpdateDate = new Date(person.biometrics[index + 1].dateUpdated);
+                  person.activities.forEach(dataEntryForAverageCalculation => {
+                    var entryDate = new Date(dataEntryForAverageCalculation.date);
+                    if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
+                      totalStepsInRange += dataEntryForAverageCalculation.steps;
+                      dataEntryCount += 1;
+                    }
+                  });
+                }
+
+                if (dataEntryCount != 0) {
+                  fullData.AvgStepsPerDataEntryForBiometricPeriod = +(totalStepsInRange / dataEntryCount).toFixed(0);
+                }
+
+                // Viable data entry days based on how long the selected biometric data has been in use, converting from milliseconds to days
+                //Check if this is the latest entry
+                if (index == person.biometrics.length - 1) {
+                  var entryDate = new Date(dataEntry.date);
+                  if (entryDate >= updateDate) {
+                    this.dataSourceFullData.data.push(fullData);
+                    biometricHasViableActivity = true;
+                  }
+                } else {
+                  nextEntryUpdateDate = new Date(person.biometrics[index + 1].dateUpdated);
+                  var entryDate = new Date(dataEntry.date);
+                  if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
+                    this.dataSourceFullData.data.push(fullData);
+                    biometricHasViableActivity = true;
+                  }
+                }
+              });
+
+              if (!biometricHasViableActivity) {
+                var fullData = {
+                  PersonID: person.id,
+                  Username: person.username,
+                  Email: person.email,
+                  SignupDate: new Date(person.signupDate).toLocaleString(),
+                  Age: person.age,
+                  Sex: person.gender,
+                  Race: person.demographic,
+                  Height: biometricData.height,
+                  Weight: biometricData.weight,
+                  WaistCircumference: biometricData.waistCircumference,
+                  NeckCircumference: biometricData.neckCircumference,
+                  BodyFatPercentage: biometricData.bodyFatPercentage,
+                  // Targets and biometrics arrays are made side by side so the indexes will match
+                  TargetWeightLossPercentage: person.targets[index].weightLossPercentage,
+                  DateBiometricsUpdated: new Date(biometricData.dateUpdated).toLocaleString(),
+                  AvgStepsPerDataEntryForBiometricPeriod: 0,
+                  ActivityDate: 'N/A',
+                  ActivitySteps: 0
+                };
+
+                this.dataSourceFullData.data.push(fullData);
               }
-            }
-            this.dataSourceFullData.data.push(fullData);
-          });
+            });
+          } else {
+            person.biometrics.forEach((biometricData, index) => {
+              var fullData = {
+                PersonID: person.id,
+                Username: person.username,
+                Email: person.email,
+                SignupDate: new Date(person.signupDate).toLocaleString(),
+                Age: person.age,
+                Sex: person.gender,
+                Race: person.demographic,
+                Height: biometricData.height,
+                Weight: biometricData.weight,
+                WaistCircumference: biometricData.waistCircumference,
+                NeckCircumference: biometricData.neckCircumference,
+                BodyFatPercentage: biometricData.bodyFatPercentage,
+                // Targets and biometrics arrays are made side by side so the indexes will match
+                TargetWeightLossPercentage: person.targets[index].weightLossPercentage,
+                DateBiometricsUpdated: new Date(biometricData.dateUpdated).toLocaleString(),
+                AvgStepsPerDataEntryForBiometricPeriod: 0,
+                ActivityDate: 'N/A',
+                ActivitySteps: 0
+              };
+
+              this.dataSourceFullData.data.push(fullData);
+            });
+          }
         }
       });
       // Refresh tables with gathered data
@@ -264,7 +348,7 @@ export class UserDashboardComponent implements OnInit{
         filename = 'AllUserBiometricHistoryReport.csv';
         headers = ['PersonID', 'Username', 'Email', 'Signup Date', 'Age', 'Sex', 'Race', 'Height (inches)', 'Weight (lbs)',
           'Waist Circumference (inches)', 'Neck Circumference (inches)', 'Body Fat Percentage (%)',
-          'Target Weight Loss Percentage (%)', 'Date Biometrics Updated', 'Average Steps Per Data Entry Related To This Biometric Data'];
+          'Target Weight Loss Percentage (%)', 'Date Biometrics Updated', 'Average Steps Per Data Entry Related To This Biometric Data', 'Activity Date', 'Activity Steps'];
           
         rows = this.dataSourceFullData.data;
         break;
@@ -330,8 +414,10 @@ export class UserDashboardComponent implements OnInit{
 
   public async onPasswordResetClick() {
     await this.apiService.flagUserForPasswordReset(this.selectedUserForPasswordReset.username, this.selectedUserForPasswordReset.email).then(async response => {
+      window.alert('Password Reset For: ' + this.selectedUserForPasswordReset.username);
       // Reset selection to empty
       this.selectedUserForPasswordReset = null;
+      this.userSelectForm.reset({});
     }, error => {
       console.log("error: " + error);
       // handle error here
@@ -374,7 +460,44 @@ export class UserDashboardComponent implements OnInit{
     });
   }
 
-  ngOnInit(): void {
+  //User select Form Builder & Form Group
+  public userSelectForm = this.fb.group({
+    user: [new Person, [Validators.required]]
+  },
+
+  {
+    validator: this.MustMatch('user')
+  })
+
+  getUserControl(name: any): AbstractControl | null {
+    return this.userSelectForm.get(name)
+  }
+
+  public filteredOptions: Observable<Person[]>;
+
+  private userFilter(value: string): Person[] {
+    const filterValue = value.toString().toLowerCase();
+    return this.personDataList.filter(user => user.username.toLowerCase().includes(filterValue));
+  }
+
+  public displayFn(user: Person): string {
+    return user && user.username ? user.username : '';
+  }
+
+  MustMatch(controlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const selection: any = control.value;
+
+      if (this.personDataList && this.personDataList.indexOf(selection) < 0) {
+        control.setErrors({ MustMatch: true });
+      } else {
+        control.setErrors(null);
+      }
+    }
+  }
+
+  async ngOnInit(): Promise<void> {
     // If user is not logged in kick to login
     if (!this.appComponent.loggedIn) {
       this.router.navigate(['/login']);
@@ -396,9 +519,23 @@ export class UserDashboardComponent implements OnInit{
       // See if user is an Admin
       if (this.appComponent.userRoles.includes("ROLE_ADMIN")) {
         // Get table data
-        this.getAllPersonDataForTables();
+        await this.getAllPersonDataForTables();
+
+        this.filteredOptions = this.userSelectForm.get("user").valueChanges.pipe(
+          startWith(''),
+          map(value => {
+            this.userFilter(value || '')
+            const username = typeof value === 'string' ? value : value?.username;
+            return username ? this.userFilter(username as string) : this.personDataList.slice();
+          }),
+        );
 
         this.showAdmin = true;
+
+        setTimeout(() => {
+          this.dataSourceLatestData.paginator = this.latestPaginator;
+          this.dataSourceFullData.paginator = this.fullPaginator;
+        }, 0);
       }
     }
   }

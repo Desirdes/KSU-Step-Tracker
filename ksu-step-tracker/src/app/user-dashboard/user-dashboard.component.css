@@ -31,7 +31,7 @@ small {
   flex-wrap: nowrap;
 }
 
-form {
+.steps-form {
   height: 100%;
   width: 600px;
   background-color: #ffc629;
@@ -42,7 +42,7 @@ form {
   margin: 10px;
 }
 
-  form h2 {
+  .steps-form h2 {
     margin-top: 20px;
     text-align: center;
     font-size: 30px;
@@ -54,20 +54,20 @@ form {
   justify-content: center;
 }
 
-form .form-group {
+.steps-form .form-group {
   margin: 20px;
   text-align: center;
   font-size: 15px;
 }
 
-form input {
+.steps-form input {
   border-radius: 20px;
   margin-bottom: 15px;
   padding: 10px;
   height: 40px;
 }
 
-form button {
+.steps-form button {
   width: 100%;
   border-radius: 1rem;
   padding: 1.5%;

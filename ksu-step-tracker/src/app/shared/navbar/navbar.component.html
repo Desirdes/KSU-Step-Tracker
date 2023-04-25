@@ -4,7 +4,7 @@
   <a class="navbar-brand">KSU Weightloss Step Tracker</a>
   <nav class="navbar navbar-expand-lg pull-right">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.currentPerson">
+      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.loggedIn">
         <li class="nav-item">
           <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'login'">
             Login
