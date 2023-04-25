@@ -16,10 +16,10 @@ export class APIService {
   constructor(private http: HttpClient) { }
 
   // API root URL
- // private rootURL = 'https://ksu-step-tracker-app.herokuapp.com';
+  private rootURL = 'https://ksu-step-tracker-app.herokuapp.com';
 
   // Temporary localhost api url for testing
-  private rootURL = 'http://localhost:5000';
+  //private rootURL = 'http://localhost:5000';
 
   // Generated after login with format: btoa(username + ":" + password)
   public userBasicAuth = '';
