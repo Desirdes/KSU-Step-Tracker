@@ -502,18 +502,17 @@ export class UserDashboardComponent implements OnInit {
     if (!this.appComponent.loggedIn) {
       this.router.navigate(['/login']);
     } else {
-      if (this.currentPerson && this.currentPerson.activities && this.currentPerson.activities.length){
-        this.latestActivityDate = new Date(this.currentPerson.activities[0].date).toDateString();
+      if (this.currentPerson) {
 
-        // Set the min and max date for adding steps. We do it this way to avoid conflict with leap years.
-        const oneYearAsMS = 365 * 24 * 60 * 60 * 1000;
         this.minDate = new Date(this.currentPerson.signupDate);
-        this.maxDate = new Date(this.minDate.getTime() + oneYearAsMS);
 
         console.log(this.minDate);
-        console.log(this.maxDate);
 
-        this.showCharts = true;
+
+        if (this.currentPerson.activities && this.currentPerson.activities.length) {
+          this.latestActivityDate = new Date(this.currentPerson.activities[0].date).toDateString();
+          this.showCharts = true;
+        }
       }
 
       // See if user is an Admin

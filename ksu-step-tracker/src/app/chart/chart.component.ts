@@ -32,7 +32,7 @@ export class ChartComponent implements OnInit{
       // Used to make a comparison line for chart
      var targetStepsArray = [];
 
-     activityArray.forEach(activity => {
+     activityArray.forEach((activity, activityIndex) => {
        var currentTargetSteps = 0
        var entryDate = new Date(activity.date).setHours(0, 0, 0, 0);
        this.currentPerson.targets.forEach((targetData, index) => {
@@ -50,9 +50,22 @@ export class ChartComponent implements OnInit{
           }
        });
 
-        dateArray.unshift(new Date(activity.date).toDateString());
-        stepsArray.unshift(activity.steps);
-        targetStepsArray.unshift(currentTargetSteps);
+       // Check if first entry
+       if (activityIndex == 0) {
+         dateArray.unshift(new Date(activity.date).toDateString());
+         stepsArray.unshift(activity.steps);
+         targetStepsArray.unshift(currentTargetSteps);
+       } else {
+         var previousEntry = activityArray[activityIndex - 1];
+         // If the date is the same as previous entry then combine them
+         if (new Date(activity.date).setHours(0, 0, 0, 0) == new Date(previousEntry.date).setHours(0, 0, 0, 0)) {
+           stepsArray[stepsArray.length - 1] += activity.steps;
+         } else {
+           dateArray.unshift(new Date(activity.date).toDateString());
+           stepsArray.unshift(activity.steps);
+           targetStepsArray.unshift(currentTargetSteps);
+         }
+       }
      });
 
       this.lineChart = new Chart("MyChart", {

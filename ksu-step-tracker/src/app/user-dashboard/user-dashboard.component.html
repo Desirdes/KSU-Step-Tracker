@@ -112,7 +112,7 @@
                 <label for="date">Date</label>
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Choose a date</mat-label>
-                  <input id="date" matInput [min]="minDate" [max]="maxDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
+                  <input id="date" matInput [min]="this.minDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
                   <mat-hint>MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
