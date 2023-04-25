@@ -1,7 +1,6 @@
 <div class="header">
     <h1>Questionnaire Form</h1>
-    <p>This form is to record your general and medical information, and your fitness goal so that we can accurately calculate
-        your measurements and target data. You must be between the ages of 19 and 40 for this study.</p>
+    <p style="text-align: start;">Please answer the questions listed below, some of which should be provided by your clinician from your recent exam. This information will remain confidential and will only be used to calculate your prescribed step count based on the measurements and target goals.  You must be between the ages of 19 and 40 to participate in this study.</p>
 </div>
 <div class="row justify-content-center my-5">
 <form class="col-lg-6" [formGroup]="questionnaireForm" (ngSubmit)="questionnaireForm.status !== 'INVALID' && onsubmit()">

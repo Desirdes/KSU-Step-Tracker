@@ -112,7 +112,7 @@
                 <label for="date">Date</label>
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Choose a date</mat-label>
-                  <input id="date" matInput [min]="this.minDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
+                  <input id="date" matInput [min]="this.minDate" [max]="this.maxDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
                   <mat-hint>MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
@@ -176,7 +176,7 @@
             <input matInput (keyup)="this.applyFilterForLatest($event)" placeholder="Search..." #input>
           </mat-form-field>
 
-          <mat-table class="mat-elevation-z8" [dataSource]="dataSourceLatestData">
+          <mat-table class="mat-elevation-z8" style="overflow-x: scroll;" [dataSource]="dataSourceLatestData">
 
             <ng-container matColumnDef="PersonID">
               <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
@@ -285,7 +285,7 @@
             <input matInput (keyup)="this.applyFilterForFull($event)" placeholder="Search..." #input>
           </mat-form-field>
 
-          <mat-table class="mat-elevation-z8" [dataSource]="dataSourceFullData">
+          <mat-table class="mat-elevation-z8" style="overflow-x: scroll;" [dataSource]="dataSourceFullData">
 
             <ng-container matColumnDef="PersonID">
               <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>

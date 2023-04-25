@@ -180,11 +180,15 @@ export class UserDashboardComponent implements OnInit {
 
             const today = new Date();
             // Viable data entry days from moment of signup to today, converting from milliseconds to days
-            var potentialDataEntryDays = (today.getTime() - signupDate.getTime()) / (1000 * 60 * 60 * 24);
+            var potentialDataEntryDays = (new Date(today.setHours(0, 0, 0, 0)).getTime() - new Date(signupDate.setHours(0, 0, 0, 0)).getTime()) / (1000 * 60 * 60 * 24);
             // The study only cares about up to a year's worth of data
             const researchPeriodLengthInDays = 365;
 
-            latestData.AvgStepsPerDay = +(totalSteps / Math.min(+potentialDataEntryDays.toFixed(0), researchPeriodLengthInDays)).toFixed(0);
+            if (new Date(today.setHours(0, 0, 0, 0)).getTime() == new Date(signupDate.setHours(0, 0, 0, 0)).getTime()) {
+              latestData.AvgStepsPerDay = 0;
+            } else {
+              latestData.AvgStepsPerDay = +(totalSteps / Math.min(+potentialDataEntryDays.toFixed(0), researchPeriodLengthInDays)).toFixed(0);
+            }
           }
           this.dataSourceLatestData.data.push(latestData);
 
@@ -505,8 +509,7 @@ export class UserDashboardComponent implements OnInit {
       if (this.currentPerson) {
 
         this.minDate = new Date(this.currentPerson.signupDate);
-
-        console.log(this.minDate);
+        this.maxDate = new Date();
 
 
         if (this.currentPerson.activities && this.currentPerson.activities.length) {

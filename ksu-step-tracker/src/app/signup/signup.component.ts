@@ -78,6 +78,7 @@ export class SignupComponent {
           // Set the personID and username for logged in user
           this.appComponent.currentPerson.id = loginResponse.personID;
           this.appComponent.currentPerson.username = loginResponse.username;
+          this.appComponent.currentPerson.full_name = this.signupForm.get('name').value;
 
           this.appComponent.userRoles = loginResponse.roles;
 
