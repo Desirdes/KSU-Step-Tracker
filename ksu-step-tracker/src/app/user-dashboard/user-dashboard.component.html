@@ -4,7 +4,7 @@
 <section style="background-color: #eee;" *ngIf="this.currentPerson">
   <div class="container py-5">
     <div class="row-container">
-      <div class="column" style="width: 50%;">
+      <div class="column col-lg-auto" style="width: 50%;">
         <div class="card mb-4" style="height: 100%;">
           <div class="card-body">
             <div class="row">
@@ -80,13 +80,13 @@
           </div>
         </div>
       </div>
-      <div class="column" style="width: 50%;">
+      <div class="column col-md-auto" style="width: 50%;">
         <div class="add-steps-component">
           <form [formGroup]="addStepsForm" (ngSubmit)="addStepsForm.status !== 'INVALID' && onSubmitStepsClick()">
             <i class="material-symbols-outlined">directions_run</i>
             <h2 class="mb-3">+ Add Steps</h2>
             <div class="form-row justify-content-center">
-              <div class="form-group col-sm-4">
+              <div class="form-group col-sm-4 text-center">
                 <label for="steps">Steps</label>
                 <input type="number" id="steps" formControlName="steps" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" name="steps">
                 <div *ngIf="getControl('steps')?.errors && getControl('steps')?.touched">
