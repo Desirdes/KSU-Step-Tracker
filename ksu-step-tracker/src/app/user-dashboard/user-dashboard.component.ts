@@ -348,8 +348,8 @@ export class UserDashboardComponent implements OnInit {
         
         rows = this.dataSourceLatestData.data;
         break;
-      case "allBiometricHistory":
-        filename = 'AllUserBiometricHistoryReport.csv';
+      case "allMetricHistory":
+        filename = 'AllUserMetricsHistoryReport.csv';
         headers = ['PersonID', 'Username', 'Email', 'Signup Date', 'Age', 'Sex', 'Race', 'Height (inches)', 'Weight (lbs)',
           'Waist Circumference (inches)', 'Neck Circumference (inches)', 'Body Fat Percentage (%)',
           'Target Weight Loss Percentage (%)', 'Date Biometrics Updated', 'Average Steps Per Data Entry Related To This Biometric Data', 'Activity Date', 'Activity Steps'];
@@ -412,8 +412,8 @@ export class UserDashboardComponent implements OnInit {
     this.getAllPersonDataAndExportToCSV("latestMetricsAndAverageSteps");
   }
 
-  public onFullUserBiometricHistoryReportClick() {
-    this.getAllPersonDataAndExportToCSV("allBiometricHistory");
+  public onFullUserMetricHistoryReportClick() {
+    this.getAllPersonDataAndExportToCSV("allMetricHistory");
   }
 
   public async onPasswordResetClick() {

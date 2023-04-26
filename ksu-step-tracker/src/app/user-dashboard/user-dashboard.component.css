@@ -2,8 +2,6 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
-    /*margin-left: 10rem;*/
-
 }
 
 .error {
@@ -19,7 +17,6 @@ small {
   display: flex;
   justify-content: center;
   align-items: center;
-  /*margin-left: 35rem;*/
 }
 
 .add-steps-component {
@@ -36,7 +33,6 @@ small {
   width: 600px;
   background-color: #ffc629;
   position: relative;
-  /*box-shadow: 30px 30px 30px 30px rgba(0, 0, 0, 0.1);*/
   border-radius: 10px;
   padding: 10px;
   margin: 10px;

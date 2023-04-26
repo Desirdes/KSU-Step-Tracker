@@ -62,10 +62,6 @@ export class LoginComponent{
     }
   }
 
-  //For backend
-  get username() { return this.loginForm.get('username'); }
-  get password() { return this.loginForm.get('password'); }
-
   public onsubmit() {
     this.loginUser();
   }

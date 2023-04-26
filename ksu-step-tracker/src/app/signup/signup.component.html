@@ -56,13 +56,20 @@
                   </div>
                 </div>
 
+                <div *ngIf="this.signupError" style="text-align: center; font-size: 18px; margin-bottom: 10px; ">
+                  <small class="text-danger">{{this.signupErrorMessage}}</small>
+                </div>
                 <div class="d-flex justify-content-center">
                   <button type="button"
-                    class="btn btn-warning btn-block btn-lg text-body" [disabled]="signupForm.status === 'INVALID'" (click)="onsubmit()">Register</button>
+                          class="btn btn-warning btn-block btn-lg text-body" [disabled]="signupForm.status === 'INVALID'" (click)="onsubmit()">
+                    Register
+                  </button>
                 </div>
 
-                <p class="text-center text-muted mt-5 mb-0">Have already an account? <a [routerLink]="['/login']"
-                    class="fw-bold text-body"><u>Login here</u></a></p>
+                <p class="text-center text-muted mt-5 mb-0">
+                  Have already an account? <a [routerLink]="['/login']"
+                                              class="fw-bold text-body"><u>Login here</u></a>
+                </p>
 
               </form>
 

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, ChartDataset, ChartOptions } from 'chart.js';
-import { NgChartsModule } from 'ng2-charts/public_api';
 import { AppComponent } from '../app.component';
-import { APIService } from '../shared/APIService';
 
 @Component({
   selector: 'app-chart',
@@ -13,7 +11,6 @@ export class ChartComponent implements OnInit{
 
   constructor(
     private appComponent: AppComponent,
-    private apiService: APIService
   ) {}
 
  public lineChart: any;

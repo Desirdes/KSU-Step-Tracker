@@ -19,6 +19,9 @@ export class SignupComponent {
     private appComponent: AppComponent
   ) { }
 
+  public signupError = false;
+  public signupErrorMessage = '';
+
   signupForm = this.fb.group({
     name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
@@ -93,7 +96,9 @@ export class SignupComponent {
 
       }, error => {
         console.log("error: " + error);
-            // handle error here
+        // handle error here
+        this.signupError = true;
+        this.signupErrorMessage = error;
       });
   }
 

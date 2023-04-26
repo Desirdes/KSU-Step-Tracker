@@ -2,7 +2,6 @@ import { Component, forwardRef, OnInit, Output, EventEmitter } from '@angular/co
 import { AbstractControl, FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { AppComponent } from '../app.component';
-import { UserDashboardComponent } from '../user-dashboard/user-dashboard.component';
 import { APIService } from '../shared/APIService';
 import { Person, TargetData, BiometricData } from '../shared/models/UserData.model';
 

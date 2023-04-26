@@ -19,16 +19,12 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { APIService } from './shared/APIService';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { UserProfileComponent } from './user-profile/user-profile.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChartComponent } from './chart/chart.component';
 import { NgChartsModule } from 'ng2-charts';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { UpdateBiometricsDialog, UpdatePersonalInfoDialog, UserDashboardComponent } from './user-dashboard/user-dashboard.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { AddStepsComponent } from './add-steps/add-steps.component';
-import { ProgressComponent } from './progress/progress.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -47,14 +43,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     LandingPageComponent,
     NavbarComponent,
     QuestionnaireComponent,
-    UserProfileComponent,
     ChartComponent,
     LoginComponent,
     SignupComponent,
     UserDashboardComponent,
-    SidenavComponent,
-    AddStepsComponent,
-    ProgressComponent,
     UpdateBiometricsDialog,
     UpdatePersonalInfoDialog
   ],
