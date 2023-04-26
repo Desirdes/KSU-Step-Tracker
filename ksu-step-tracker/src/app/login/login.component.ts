@@ -20,6 +20,8 @@ export class LoginComponent{
 
   public resetPassword = false;
 
+  public invalidLogin = false;
+
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]]
@@ -136,6 +138,7 @@ export class LoginComponent{
     }, error => {
       console.log("error: " + error);
         // handle error here
+      this.invalidLogin = true;
     });
   }
 }
