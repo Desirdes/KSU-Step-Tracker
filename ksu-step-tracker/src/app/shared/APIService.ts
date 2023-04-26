@@ -16,7 +16,7 @@ export class APIService {
   constructor(private http: HttpClient) { }
 
   // API root URL
- // private rootURL = 'https://ksu-step-tracker-app.herokuapp.com';
+  //private rootURL = 'https://ksu-step-tracker-app.herokuapp.com';
 
   // Temporary localhost api url for testing
   private rootURL = 'http://localhost:5000';
@@ -155,6 +155,28 @@ export class APIService {
     };
     var body = JSON.stringify(data);
     const response = await fetch(this.rootURL + '/api/v1/admin/password-reset', {
+      method: 'POST',
+      body: body,
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth }
+    });
+
+    if (response.ok) {
+      return Promise.resolve();
+    } else {
+      // Get text for error message
+      const errorText = await response.text();
+      return Promise.reject("Error " + response.status + ": " + errorText);
+    }
+  }
+
+  // Reset password
+  public async resetPassword(username, password) {
+    var data = {
+      username: username,
+      password: password
+    };
+    var body = JSON.stringify(data);
+    const response = await fetch(this.rootURL + '/access/password-reset', {
       method: 'POST',
       body: body,
       headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ` + this.userBasicAuth }

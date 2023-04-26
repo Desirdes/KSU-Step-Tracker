@@ -25,7 +25,7 @@ import { ChartComponent } from './chart/chart.component';
 import { NgChartsModule } from 'ng2-charts';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { UpdateBiometricsDialog, UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { UpdateBiometricsDialog, UpdatePersonalInfoDialog, UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { AddStepsComponent } from './add-steps/add-steps.component';
 import { ProgressComponent } from './progress/progress.component';
@@ -34,6 +34,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
@@ -54,7 +55,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     SidenavComponent,
     AddStepsComponent,
     ProgressComponent,
-    UpdateBiometricsDialog
+    UpdateBiometricsDialog,
+    UpdatePersonalInfoDialog
   ],
   imports: [
     BrowserModule,
@@ -82,6 +84,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSortModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    MatAutocompleteModule,
     NgCircleProgressModule.forRoot({
       "radius": 60,
       "space": -10,

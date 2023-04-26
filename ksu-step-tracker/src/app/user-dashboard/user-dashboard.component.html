@@ -18,6 +18,15 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.email}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
                 <p class="mb-0">Sex</p>
               </div>
               <div class="col-sm-9">
@@ -71,7 +80,12 @@
             </div>
             <hr>
             <div class="row">
-              <div class="col-sm-12">
+              <div class="col-sm-6" style="display: flex; justify-content: center;">
+                <button mat-raised-button color="primary" (click)="this.onUpdatePersonalInfo()">
+                  Update Personal Info
+                </button>
+              </div>
+              <div class="col-sm-6" style="display: flex; justify-content: center;">
                 <button mat-raised-button color="primary" (click)="this.onUpdateBiometricsButtonClick()">
                   Update Biometrics
                 </button>
@@ -82,7 +96,7 @@
       </div>
       <div class="column col-md-auto" style="width: 50%;">
         <div class="add-steps-component">
-          <form [formGroup]="addStepsForm" (ngSubmit)="addStepsForm.status !== 'INVALID' && onSubmitStepsClick()">
+          <form class="steps-form" [formGroup]="addStepsForm" (ngSubmit)="addStepsForm.status !== 'INVALID' && onSubmitStepsClick()">
             <i class="material-symbols-outlined">directions_run</i>
             <h2 class="mb-3">+ Add Steps</h2>
             <div class="form-row justify-content-center">
@@ -98,7 +112,7 @@
                 <label for="date">Date</label>
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Choose a date</mat-label>
-                  <input id="date" matInput [min]="minDate" [max]="maxDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
+                  <input id="date" matInput [min]="this.minDate" [max]="this.maxDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
                   <mat-hint>MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
@@ -129,15 +143,23 @@
           <mat-card-title>Reset User Password</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <mat-form-field appearance="fill">
-            <mat-label>User</mat-label>
-            <mat-select [(ngModel)]="this.selectedUserForPasswordReset">
-              <mat-option *ngFor="let user of this.personDataList" [value]="user">
-                {{user.username}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <button mat-raised-button [disabled]="!this.selectedUserForPasswordReset" (click)="this.onPasswordResetClick()">Reset Password</button>
+          <form [formGroup]="this.userSelectForm">
+            <mat-form-field appearance="fill">
+              <mat-label>User</mat-label>
+              <input type="text"
+                     placeholder="Pick a user..."
+                     matInput
+                     formControlName="user"
+                     [matAutocomplete]="auto"
+                     [(ngModel)]="this.selectedUserForPasswordReset">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="this.displayFn">
+                <mat-option *ngFor="let user of this.filteredOptions | async" [value]="user">
+                  {{user.username}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="this.userSelectForm.status === 'INVALID'" (click)="this.onPasswordResetClick()">Reset Password</button>
+          </form>
         </mat-card-content>
       </mat-card>
     </div>
@@ -149,7 +171,12 @@
           <button mat-raised-button (click)="this.onLatestUserMetricsReportClick()">Download Report</button>
         </mat-card-header>
         <mat-card-content>
-          <mat-table class="mat-elevation-z8" [dataSource]="dataSourceLatestData">
+          <mat-form-field>
+            <mat-label>Search Table</mat-label>
+            <input matInput (keyup)="this.applyFilterForLatest($event)" placeholder="Search..." #input>
+          </mat-form-field>
+
+          <mat-table class="mat-elevation-z8" style="overflow-x: scroll;" [dataSource]="dataSourceLatestData">
 
             <ng-container matColumnDef="PersonID">
               <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
@@ -236,6 +263,12 @@
             <mat-row *matRowDef="let row; columns: displayedColumnsLatestData"></mat-row>
 
           </mat-table>
+
+          <mat-paginator #latestPaginator
+                         [pageSizeOptions]="[10, 25, 50]"
+                         showFirstLastButtons
+                         aria-label="Select page of table">
+          </mat-paginator>
         </mat-card-content>
       </mat-card>
     </div>
@@ -247,7 +280,12 @@
           <button mat-raised-button (click)="this.onFullUserBiometricHistoryReportClick()">Download Report</button>
         </mat-card-header>
         <mat-card-content>
-          <mat-table class="mat-elevation-z8" [dataSource]="dataSourceFullData">
+          <mat-form-field>
+            <mat-label>Search Table</mat-label>
+            <input matInput (keyup)="this.applyFilterForFull($event)" placeholder="Search..." #input>
+          </mat-form-field>
+
+          <mat-table class="mat-elevation-z8" style="overflow-x: scroll;" [dataSource]="dataSourceFullData">
 
             <ng-container matColumnDef="PersonID">
               <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
@@ -324,11 +362,28 @@
               <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDataEntryForBiometricPeriod}}</mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="ActivityDate">
+              <mat-header-cell *matHeaderCellDef>Activity Date</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.ActivityDate}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="ActivitySteps">
+              <mat-header-cell *matHeaderCellDef>Activity Steps</mat-header-cell>
+              <mat-cell *matCellDef="let entry">{{entry.ActivitySteps}}</mat-cell>
+            </ng-container>
+
             <mat-header-row *matHeaderRowDef="displayedColumnsFullData"></mat-header-row>
 
             <mat-row *matRowDef="let row; columns: displayedColumnsFullData"></mat-row>
 
           </mat-table>
+
+          <mat-paginator #fullPaginator
+                         [pageSizeOptions]="[10, 25, 50]"
+                         showFirstLastButtons
+                         aria-label="Select page of table">
+          </mat-paginator>
+
         </mat-card-content>
       </mat-card>
     </div>
