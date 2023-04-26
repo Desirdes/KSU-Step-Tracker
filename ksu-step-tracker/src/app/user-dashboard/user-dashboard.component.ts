@@ -185,7 +185,7 @@ export class UserDashboardComponent implements OnInit {
             const researchPeriodLengthInDays = 365;
 
             if (new Date(today.setHours(0, 0, 0, 0)).getTime() == new Date(signupDate.setHours(0, 0, 0, 0)).getTime()) {
-              latestData.AvgStepsPerDay = 0;
+              latestData.AvgStepsPerDay = totalSteps;
             } else {
               latestData.AvgStepsPerDay = +(totalSteps / Math.min(+potentialDataEntryDays.toFixed(0), researchPeriodLengthInDays)).toFixed(0);
             }
@@ -251,21 +251,20 @@ export class UserDashboardComponent implements OnInit {
                 if (dataEntryCount != 0) {
                   fullData.AvgStepsPerDataEntryForBiometricPeriod = +(totalStepsInRange / dataEntryCount).toFixed(0);
                 }
-
                 // Viable data entry days based on how long the selected biometric data has been in use, converting from milliseconds to days
                 //Check if this is the latest entry
                 if (index == person.biometrics.length - 1) {
-                  var entryDate = new Date(dataEntry.date);
-                  if (entryDate >= updateDate) {
-                    this.dataSourceFullData.data.push(fullData);
+                  var entryDate = new Date(new Date(dataEntry.date).setHours(0,0,0,0));
+                  if (entryDate >= new Date(new Date(updateDate).setHours(0, 0, 0, 0))) {
                     biometricHasViableActivity = true;
+                    this.dataSourceFullData.data.push(fullData);
                   }
                 } else {
                   nextEntryUpdateDate = new Date(person.biometrics[index + 1].dateUpdated);
-                  var entryDate = new Date(dataEntry.date);
-                  if (updateDate <= entryDate && entryDate < nextEntryUpdateDate) {
-                    this.dataSourceFullData.data.push(fullData);
+                  var entryDate = new Date(new Date(dataEntry.date).setHours(0, 0, 0, 0));
+                  if (new Date(new Date(updateDate).setHours(0, 0, 0, 0)) <= entryDate && entryDate < nextEntryUpdateDate) {
                     biometricHasViableActivity = true;
+                    this.dataSourceFullData.data.push(fullData);
                   }
                 }
               });
