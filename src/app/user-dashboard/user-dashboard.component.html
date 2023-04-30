@@ -1,0 +1,405 @@
+<!--Main User Content-->
+<section style="background-color: #eee;" *ngIf="this.currentPerson">
+  <div class="container py-5">
+    <div class="row-container">
+      <div class="column col-lg-auto" style="width: 50%;">
+        <div class="card mb-4" style="height: 100%;">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.full_name}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.email}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Sex</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.gender}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Current Weight (lbs)</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.biometrics[this.currentPerson.biometrics.length - 1].weight}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Target Weight (lbs)</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.biometrics[this.currentPerson.biometrics.length - 1].weight - this.currentPerson.targets[0].weightLoss}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Height (inches)</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.biometrics[this.currentPerson.biometrics.length - 1].height}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Latest Recorded Step Count</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.activities.length? this.currentPerson.activities[0].steps + ' on ' + this.latestActivityDate : 'No recorded activity.'}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Target Step Count Per Day</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{this.currentPerson.targets[this.currentPerson.targets.length - 1].dailySteps}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-6" style="display: flex; justify-content: center;">
+                <button mat-raised-button color="primary" (click)="this.onUpdatePersonalInfo()">
+                  Update Personal Info
+                </button>
+              </div>
+              <div class="col-sm-6" style="display: flex; justify-content: center;">
+                <button mat-raised-button color="primary" (click)="this.onUpdateBiometricsButtonClick()">
+                  Update Biometrics
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column col-md-auto" style="width: 50%;">
+        <div class="add-steps-component">
+          <form class="steps-form" [formGroup]="addStepsForm" (ngSubmit)="addStepsForm.status !== 'INVALID' && onSubmitStepsClick()">
+            <i class="material-symbols-outlined">directions_run</i>
+            <h2 class="mb-3">+ Add Steps</h2>
+            <div class="form-row justify-content-center">
+              <div class="form-group col-sm-4 text-center">
+                <label for="steps">Steps</label>
+                <input type="number" id="steps" formControlName="steps" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" name="steps">
+                <div *ngIf="getControl('steps')?.errors && getControl('steps')?.touched">
+                  <small class="text-danger" *ngIf="getControl('steps')?.errors?.['required']">Steps is required</small>
+                </div>
+              </div>
+            </div> <div class="form-row justify-content-center">
+              <div class="form-group col-lg-5">
+                <label for="date">Date</label>
+                <mat-form-field class="example-full-width" style="display: unset;" appearance="fill">
+                  <mat-label>Choose a date</mat-label>
+                  <input id="date" matInput [min]="this.minDate" [max]="this.maxDate" formControlName="date" [ngClass]="{error : getControl('steps')?.errors && getControl('steps')?.touched}" [matDatepicker]="picker">
+                  <mat-hint style="text-align: center; width: 100%; min-width: 100%;">MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <div *ngIf="getControl('date')?.errors && getControl('date')?.touched">
+                  <small class="text-danger" *ngIf="getControl('date')?.errors?.['required']">Date is required</small>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-dark" id="submit" type="submit" [disabled]="addStepsForm.status === 'INVALID'">Save</button>
+            <!--<button class="btn btn-light" id="goBack" type="submit" >Go Back</button>-->
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="this.showCharts">
+      <app-chart></app-chart>
+    </div>
+  </div>
+</section>
+
+<!--Pure Admin Dashboard-->
+<section style="background-color: #eee;" *ngIf="!this.currentPerson && this.showAdmin">
+  <div class="container py-5">
+    <div class="row">
+      <mat-card style="background: white; padding: 10px;">
+        <mat-card-header style=" font-size: 20px; line-height: 40px;">
+          <mat-card-title>Reset User Password</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="this.userSelectForm">
+            <mat-form-field appearance="fill">
+              <mat-label>Select User</mat-label>
+              <input type="text"
+                     placeholder="Pick a user..."
+                     matInput
+                     formControlName="user"
+                     [matAutocomplete]="auto"
+                     [(ngModel)]="this.selectedUserForPasswordReset">
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="this.displayFn">
+                <mat-option *ngFor="let user of this.filteredOptions | async" [value]="user">
+                  {{user.username}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <button mat-raised-button style=" margin: 15px;" [disabled]="this.userSelectForm.status === 'INVALID'" (click)="this.onPasswordResetClick()">Reset Password</button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <br />
+
+    <div class="row">
+      <!-- Latest Data Table -->
+      <mat-card style=" background: white; padding: 10px;">
+        <mat-card-header style=" font-size: 20px; line-height: 40px;">
+          <mat-card-title>Latest Metrics Per User</mat-card-title>
+        </mat-card-header>
+        <br />
+        <mat-card-content>
+          <mat-form-field>
+            <mat-label>Search Table</mat-label>
+            <input matInput (keyup)="this.applyFilterForLatest($event)" placeholder="Search..." #input>
+          </mat-form-field>
+
+          <button mat-raised-button style=" margin: 15px;" (click)="this.onLatestUserMetricsReportClick()">Download Report</button>
+
+          <div style="overflow-x: auto;">
+            <mat-table class="mat-elevation-z8" style="width: fit-content; white-space: nowrap;" [dataSource]="dataSourceLatestData">
+
+              <ng-container matColumnDef="PersonID">
+                <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.PersonID}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Username">
+                <mat-header-cell *matHeaderCellDef style=" min-width: 120px;">Username</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="overflow: auto; min-width: 120px;">{{entry.Username}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Email">
+                <mat-header-cell *matHeaderCellDef style="min-width: 200px;">Email</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="overflow: auto; min-width: 200px; ">{{entry.Email}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="SignupDate">
+                <mat-header-cell *matHeaderCellDef style="min-width: 100px;">Signup Date</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="white-space: normal; min-width: 100px;">{{entry.SignupDate}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Age">
+                <mat-header-cell *matHeaderCellDef>Age</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.Age}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Sex">
+                <mat-header-cell *matHeaderCellDef>Sex</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.Sex}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Race">
+                <mat-header-cell *matHeaderCellDef>Race</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.Race}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="LatestHeight">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Latest Height (inches)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.LatestHeight}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="LatestWeight">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Latest Weight (lbs)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.LatestWeight}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="LatestWaistCircumference">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Latest Waist Circumference (inches)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.LatestWaistCircumference}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="LatestNeckCircumference">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Latest Neck Circumference (inches)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.LatestNeckCircumference}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="LatestBodyFatPercentage">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Latest Body Fat Percentage (%)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.LatestBodyFatPercentage}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="LatestTargetWeightLossPercentage">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Latest Target Weight Loss Percentage (%)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.LatestTargetWeightLossPercentage}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="DateBiometricsUpdated">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Date Biometrics Updated</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="white-space: normal;">{{entry.DateBiometricsUpdated}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="AvgStepsPerDataEntry">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Average Steps Per Data Entry</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDataEntry}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="AvgStepsPerDay">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Average Steps Per Day Across Research Period</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDay}}</mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumnsLatestData"></mat-header-row>
+
+              <mat-row *matRowDef="let row; columns: displayedColumnsLatestData"></mat-row>
+
+            </mat-table>
+          </div>
+
+
+          <mat-paginator #latestPaginator
+                         [pageSizeOptions]="[10, 25, 50]"
+                         showFirstLastButtons
+                         aria-label="Select page of table">
+          </mat-paginator>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <br />
+
+    <div class="row">
+      <!-- Full Data Table -->
+      <mat-card style="background: white; padding: 10px;">
+        <mat-card-header style=" font-size: 20px; line-height: 40px;">
+          <mat-card-title>Full Metrics History Per User</mat-card-title>
+        </mat-card-header>
+        <br />
+        <mat-card-content>
+          <mat-form-field>
+            <mat-label>Search Table</mat-label>
+            <input matInput (keyup)="this.applyFilterForFull($event)" placeholder="Search..." #input>
+          </mat-form-field>
+
+          <button mat-raised-button style=" margin: 15px;" (click)="this.onFullUserMetricHistoryReportClick()">Download Report</button>
+
+          <div style="overflow-x: auto;">
+            <mat-table class="mat-elevation-z8" style="width: fit-content; white-space: nowrap;" [dataSource]="dataSourceFullData">
+
+              <ng-container matColumnDef="PersonID">
+                <mat-header-cell *matHeaderCellDef>PersonID</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.PersonID}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Username">
+                <mat-header-cell *matHeaderCellDef style=" min-width: 120px;">Username</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="overflow: auto; min-width: 120px;">{{entry.Username}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Email">
+                <mat-header-cell *matHeaderCellDef style="min-width: 200px;">Email</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="overflow: auto; min-width: 200px; ">{{entry.Email}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="SignupDate">
+                <mat-header-cell *matHeaderCellDef style="min-width: 100px;">Signup Date</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="white-space: normal; min-width: 100px;">{{entry.SignupDate}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Age">
+                <mat-header-cell *matHeaderCellDef>Age</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.Age}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Sex">
+                <mat-header-cell *matHeaderCellDef>Sex</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.Sex}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Race">
+                <mat-header-cell *matHeaderCellDef>Race</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.Race}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Height">
+                <mat-header-cell *matHeaderCellDef style="min-width: 130px;">Height (inches)</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="min-width: 130px;">{{entry.Height}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Weight">
+                <mat-header-cell *matHeaderCellDef style="min-width: 100px;">Weight (lbs)</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="min-width: 100px;">{{entry.Weight}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="WaistCircumference">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal; min-width: 130px;">Waist Circumference (inches)</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="min-width: 130px;">{{entry.WaistCircumference}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="NeckCircumference">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal; min-width: 130px;">Neck Circumference (inches)</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="min-width: 130px;">{{entry.NeckCircumference}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="BodyFatPercentage">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Body Fat Percentage (%)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.BodyFatPercentage}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="TargetWeightLossPercentage">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Target Weight Loss Percentage (%)</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.TargetWeightLossPercentage}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="DateBiometricsUpdated">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Date Biometrics Updated</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="white-space: normal;">{{entry.DateBiometricsUpdated}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="AvgStepsPerDataEntryForBiometricPeriod">
+                <mat-header-cell *matHeaderCellDef style="white-space: normal;">Average Steps Per Data Entry Related To This Biometric Data</mat-header-cell>
+                <mat-cell *matCellDef="let entry">{{entry.AvgStepsPerDataEntryForBiometricPeriod}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="ActivityDate">
+                <mat-header-cell *matHeaderCellDef style="min-width: 130px;">Activity Date</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="white-space: normal; min-width: 130px;">{{entry.ActivityDate}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="ActivitySteps">
+                <mat-header-cell *matHeaderCellDef style="min-width: 130px;">Activity Steps</mat-header-cell>
+                <mat-cell *matCellDef="let entry" style="min-width: 130px;">{{entry.ActivitySteps}}</mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumnsFullData"></mat-header-row>
+
+              <mat-row *matRowDef="let row; columns: displayedColumnsFullData"></mat-row>
+
+            </mat-table>
+          </div>
+
+
+          <mat-paginator #fullPaginator
+                         [pageSizeOptions]="[10, 25, 50]"
+                         showFirstLastButtons
+                         aria-label="Select page of table">
+          </mat-paginator>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>

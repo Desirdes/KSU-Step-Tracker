@@ -1,0 +1,32 @@
+<!-- Navbar -->
+<div class="navbar navbar-expand-lg fixed-top">
+  <!--If a user is already logged in simply route to dashboard, otherwise to landing page-->
+  <a class="navbar-brand">KSU Weight Loss Step Tracker</a>
+  <nav class="navbar navbar-expand-lg pull-right">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="!this.appComponent.loggedIn">
+        <li class="nav-item">
+          <button type="button" class="btn btn-link px-3 me-2" [routerLink]="'login'">
+            Login
+          </button>
+          <button type="button" class="btn btn-dark me-3" [routerLink]="'signup'">
+            Sign Up
+          </button>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav mr-auto pull-right" *ngIf="this.appComponent.loggedIn">
+        <li class="nav-item">
+          <!-- Since only an Admin would be able to be logged in while not having any person data then we use 'Admin' as the displayed name -->
+          <div class="nav-user-name-display">
+            Welcome, {{this.appComponent.currentPerson? this.appComponent.currentPerson.full_name : 'Admin'}}
+          </div>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn btn-dark me-3" (click)="this.onLogoutClick()">
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>

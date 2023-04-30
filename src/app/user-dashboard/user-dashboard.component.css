@@ -1,0 +1,121 @@
+.row-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+small {
+  font-size: 15px;
+}
+
+.alert {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-steps-component {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.steps-form {
+  height: 100%;
+  width: 600px;
+  background-color: #ffc629;
+  position: relative;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+}
+
+  .steps-form h2 {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 30px;
+  }
+
+.material-symbols-outlined {
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.steps-form .form-group {
+  margin: 20px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.steps-form input {
+  border-radius: 20px;
+  margin-bottom: 15px;
+  padding: 10px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.steps-form button {
+  width: 100%;
+  border-radius: 1rem;
+  padding: 1.5%;
+}
+
+/*Responsive View*/
+/* For Mobile devices */
+@media screen and (min-width: 320px)
+and (max-width: 480px) { 
+  .row-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+  }
+
+  .card {
+    width: auto;
+  }
+ }
+
+/* For Tablets or iPad */
+@media screen and (min-width: 480px)
+and (max-width: 768px) { 
+  .row-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+  }
+  .card {
+    width: auto;
+  }
+ }
+
+ /* Laptop or small-size screen */
+@media screen and (min-width: 768px)
+and (max-width: 1024px) { 
+  .row-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+  }
+  .card {
+    width: auto;
+  }
+ }
