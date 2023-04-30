@@ -8,6 +8,17 @@ The KSU Department of Exercise Science and Sport Management wants to have a syst
 * Armando Negron Achecar - Backend Developer/Planning Manager
 * David Sanford - Backend Developer/Development Manager
 
+# Software Dependencies
+* [Springboot Initializer](https://spring.io/)
+  * _We are using Java version 8 for our project_
+  * Includes the following dependencies:
+    * Spring Boot DevTools
+    * Spring Web
+    * H2 Database
+    * Thymeleaf
+  * Visual Studio (for frontend)
+* [Angular](https://angular.io/cli)
+
 # Installation Process
 1. Download the IntelliJ Ultimate version: https://www.jetbrains.com/idea/download/
    2. Get the student license to get all developer tools from Jetbrains: https://www.jetbrains.com/community/education/#students
