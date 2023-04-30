@@ -1,27 +1,25 @@
-# KsuStepTracker
+# Introduction 
+The KSU Department of Exercise Science and Sport Management wants to have a system that allows their patients to input their general information, such as age, sex, race, etc., and their medical info, such as body composition, weight, etc., and step count so that the system can display their target weight, current step count, and target step count.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.5.
+# Contributors
+* Kristie Boyd - Team Lead/Project Manager
+* Alexandria Fuller - Frontend Developer/Supprt Manager
+* Santhiya Subramanian - Frontend Developer/Quality & Process Manager
+* Armando Negron Achecar - Backend Developer/Planning Manager
+* David Sanford - Backend Developer/Development Manager
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Installation Process
+1. Download the IntelliJ Ultimate version: https://www.jetbrains.com/idea/download/
+   2. Get the student license to get all developer tools from Jetbrains: https://www.jetbrains.com/community/education/#students
+2. Download Java: https://www.java.com/en/download/manual.jsp
+3. Download Node.JS version 18.15.0: https://nodejs.org/en/#download
+4. Download any version Visual Studio: https://visualstudio.microsoft.com/
+5. Click the 'code' button on this repository and then click 'Download Zip'.
+6. After downloading the ZIP file extract its contents to a desired folder.
+7. Open the extracted 'KSU-Step-Tracker-main' folder in Visual Studio.
+8. In the 'Solution Explorer' pane on the righthand side of Visual Studio right click the 'ksu-step-tracker' folder and select 'open in terminal'.
+9. In the opened terminal run the following command line:
+* `npm install`
+10. Now the project should be ready to use. Run the following command in the terminal to run a development build:
+* `ng serve`
+11. If it is running without error you will be able to access it by going to http://localhost:4200/ in your browser.
