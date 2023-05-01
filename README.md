@@ -28,7 +28,7 @@ The KSU Department of Exercise Science and Sport Management wants to have a syst
 5. Click the 'code' button on this repository and then click 'Download Zip'.
 6. After downloading the ZIP file extract its contents to a desired folder.
 7. Open the extracted 'KSU-Step-Tracker-main' folder in Visual Studio.
-8. In the 'Solution Explorer' pane on the righthand side of Visual Studio right click the 'ksu-step-tracker' folder and select 'open in terminal'.
+8. At the top of Visual Studio click 'view' and select 'Terminal'.
 9. In the opened terminal run the following command line:
 * `npm install`
 10. Now the project should be ready to use. Run the following command in the terminal to run a development build:
