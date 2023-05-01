@@ -109,7 +109,7 @@ export class APIService {
     const response = await fetch(this.rootURL + '/access/login', {
       method: 'POST',
       body: body,
-      headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + btoa('user:password')}
+      headers: {'Content-Type': 'application/json'}
     });
 
     if(response.ok){
@@ -135,7 +135,7 @@ export class APIService {
     const response = await fetch(this.rootURL + '/access/signup', {
       method: 'POST',
       body: body,
-      headers: {'Content-Type': 'application/json', 'Authorization': `Basic ` + btoa('user:password')}
+      headers: {'Content-Type': 'application/json'}
     });
 
     if(response.ok){
