@@ -10,7 +10,7 @@ The KSU Department of Exercise Science and Sport Management wants to have a syst
 
 # Software Dependencies
 * [Springboot Initializer](https://spring.io/)
-  * _We are using Java version 8 for our project_
+  * _We are using Java version 17 for our project_
   * Includes the following dependencies:
     * Spring Boot DevTools
     * Spring Web
